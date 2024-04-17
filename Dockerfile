@@ -10,7 +10,6 @@ ENV JDBC_DATABASE_URL ${JDBC_DATABASE_URL}
 ENV JDBC_DATABASE_USERNAME ${JDBC_DATABASE_USERNAME}
 
 WORKDIR /app
-RUN ls -al
-COPY ./EMart-BE-Balance-Cart-History-Rating-0.0.1-SNAPSHOT.jar /app
+COPY ./backend-bchr-0.0.1-SNAPSHOT.jar /app
 EXPOSE 8080
-CMD ["java","-jar","EMart-BE-Balance-Cart-History-Rating-0.0.1-SNAPSHOT.jar"]
+CMD ["java","-jar","backend-bchr-0.0.1-SNAPSHOT.jar"]
