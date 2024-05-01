@@ -33,6 +33,7 @@ dependencies {
 	compileOnly("org.projectlombok:lombok")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+	annotationProcessor("org.springframework.boot:spring-boot-starter-validation")
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.seleniumhq.selenium:selenium-java:$seleniumJavaVersion")
@@ -40,6 +41,9 @@ dependencies {
 	testImplementation("io.github.bonigarcia:webdrivermanager:$webdrivermanagerVersion")
 	testImplementation("org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion")
 	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion")
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	runtimeOnly("org.postgresql:postgresql")
+
 }
 
 tasks.register<Test>("unitTest") {
