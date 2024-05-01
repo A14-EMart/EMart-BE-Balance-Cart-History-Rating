@@ -1,6 +1,7 @@
-package com.a14.emart.backendbchr;
+package com.a14.emart.backendbchr.model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,11 +9,12 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ShoppingCartTest {
-    private List<Product> products;
+    private ShoppingCart shoppingCart;
+    private Product product1;
+    private Product product2;
 
+    @BeforeEach
     public void setUp() {
-        @BeforeEach
-        this.products = new ArrayList<>();
         Product product1 = new Product();
         product1.setProductId("11111");
         product1.setProductName("Snack Tok");
@@ -25,15 +27,16 @@ public class ShoppingCartTest {
         product2.setProductQuantity(15);
         product2.setProductPrice(14000);
 
-        this.products.add(product1);
-        this.products.add(product2);
+        List<CartItem> cartItems = new ArrayList<>();
+        cartItems.add(new CartItem(product1, 1));
+        cartItems.add(new CartItem(product2, 1));
+
+        shoppingCart = new ShoppingCart(cartItems, "123");
     }
     @Test
     public void testCreateCartEmptyProduct() {
-        this.products.clear();
-        assertThrows(IllegalArgumentException.class, () ->{
-            ShoppingCart shoppingCart = new ShoppingCart(this.products, "lala");
-        });
+        List<CartItem> emptyCartItems = new ArrayList<>();
+        assertThrows(IllegalArgumentException.class, () -> new ShoppingCart(emptyCartItems, "123"));
     }
 
     @Test
@@ -45,8 +48,7 @@ public class ShoppingCartTest {
         product3.setProductQuantity(20);
         product3.setProductPrice(15000);
 
-        products.add(product3);
-        ShoppingCart shoppingCart = new ShoppingCart(this.products, "lala");
+        shoppingCart.addProduct(product3, 1);
 
         assertEquals(3, shoppingCart.getProducts().size());
         assertEquals(product3, shoppingCart.getProducts().get(2));
@@ -54,9 +56,6 @@ public class ShoppingCartTest {
 
     @Test
     public void testCreateShoppingCartSuccess() {
-        ShoppingCart shoppingCart = new ShoppingCart(this.products, "lala");
-        assertSame(this.products, shoppingCart.getProducts());
-
         assertEquals("Snack Tok", shoppingCart.getProducts().get(0).getProductName());
         assertEquals("Taro", shoppingCart.getProducts().get(1).getProductName());
 
