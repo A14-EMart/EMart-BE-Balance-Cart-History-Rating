@@ -1,13 +1,18 @@
 package com.a14.emart.backendbchr.model;
+import com.a14.emart.backendbchr.observer.CartObserver;
 import java.util.ArrayList;
 import java.util.List;
-import com.a14.emart.backendbchr.model.Product;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 
-@Builder
-@Getter
+
+@Entity
 public class ShoppingCart {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    @OneToMany(mappedBy = "shoppingCart", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartItem> items;
     private String pembeliId;
     private List<CartObserver> observers = new ArrayList<>();
@@ -59,8 +64,5 @@ public class ShoppingCart {
         return productList;
     }
 
-//    public String getPembeli() {
-//        return pembeliId.getName();
-//    }
 }
 
