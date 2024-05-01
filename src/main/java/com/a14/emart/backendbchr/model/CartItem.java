@@ -6,7 +6,7 @@ import lombok.*;
 @Entity
 @Getter
 @Setter
-class CartItem {
+public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

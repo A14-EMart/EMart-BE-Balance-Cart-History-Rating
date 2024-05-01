@@ -19,13 +19,13 @@ public class ShoppingCartTest {
         product1.setProductId("11111");
         product1.setProductName("Snack Tok");
         product1.setProductQuantity(10);
-        product1.setProductPrice(20000);
+        product1.setProductPrice(20000.00);
 
         Product product2 = new Product();
         product2.setProductId("22222");
         product2.setProductName("Taro");
         product2.setProductQuantity(15);
-        product2.setProductPrice(14000);
+        product2.setProductPrice(14000.00);
 
         List<CartItem> cartItems = new ArrayList<>();
         cartItems.add(new CartItem(product1, 1));
@@ -59,11 +59,11 @@ public class ShoppingCartTest {
         assertEquals("Snack Tok", shoppingCart.getProducts().get(0).getProductName());
         assertEquals("Taro", shoppingCart.getProducts().get(1).getProductName());
 
-        assertEquals("10", shoppingCart.getProducts().get(0).getProductQuantity());
-        assertEquals("15", shoppingCart.getProducts().get(1).getProductQuantity());
+        assertEquals(10, shoppingCart.getProducts().get(0).getProductQuantity());
+        assertEquals(15, shoppingCart.getProducts().get(1).getProductQuantity());
 
-        assertEquals("20000", shoppingCart.getProducts().get(0).getProductPrice());
-        assertEquals("14000", shoppingCart.getProducts().get(1).getProductPrice());
+        assertEquals(20000.00, shoppingCart.getProducts().get(0).getProductPrice());
+        assertEquals(14000.00, shoppingCart.getProducts().get(1).getProductPrice());
 
         assertEquals(2, shoppingCart.getProducts().size());
     }
