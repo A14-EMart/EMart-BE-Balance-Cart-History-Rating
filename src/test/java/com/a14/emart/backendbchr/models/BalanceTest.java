@@ -13,23 +13,23 @@ public class BalanceTest {
     @BeforeEach
     public void setUp() {
         this.balance = new Balance();
-        this.balance.setUserId("4E4E");
-        this.balance.setNominal(20000);
+        this.balance.setUserId(42L);
+        this.balance.setNominal(BigDecimal.valueOf(20000));
     }
 
     @Test
     void testGetUserId() {
-        assertEquals("4E4E", this.balance.getUserId());
+        assertEquals(42, this.balance.getUserId());
     }
 
     @Test
     void testGetNominal() {
-        assertEquals(20000, this.balance.getNominal());
+        assertEquals(BigDecimal.valueOf(20000), this.balance.getNominal());
     }
 
     @Test
     void testSetNominal() {
-        BigDecimal nominalBalance = 10000;
+        BigDecimal nominalBalance = BigDecimal.valueOf(10000);
         this.balance.setNominal(nominalBalance);
         assertEquals(nominalBalance, this.balance.getNominal());
     }
