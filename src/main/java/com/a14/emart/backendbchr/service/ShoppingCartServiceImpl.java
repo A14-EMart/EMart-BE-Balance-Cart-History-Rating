@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.Optional;
 
 @Service
@@ -16,35 +17,25 @@ public class ShoppingCartServiceImpl {
     @Autowired
     private ShoppingCartRepository shoppingCartRepository;
 
-    @Transactional
-    public void addProductToCart(Long cartId, Product product, int quantity) {
-        ShoppingCart cart = shoppingCartRepository.findById(cartId)
-                .orElseThrow(() -> new IllegalArgumentException("Shopping Cart not found with ID: " + cartId));
-        cart.addProduct(product, quantity);
-        shoppingCartRepository.save(cart);
+    public ShoppingCart createShoppingCart(String pembeliId) {
+        return new ShoppingCart(new HashMap<>(), pembeliId);
     }
 
-
-    @Transactional
-    public void removeProductFromCart(Long cartId, Product product) {
-        ShoppingCart cart = shoppingCartRepository.findById(cartId)
-                .orElseThrow(() -> new IllegalArgumentException("Shopping Cart not found with ID: " + cartId));
-        cart.removeProduct(product);
-        shoppingCartRepository.save(cart);
+    public void addProduct(ShoppingCart cart, Product product, int quantity) {
+        if (cart != null && product != null) {
+            cart.addProduct(product, quantity);
+        }
     }
 
-
-    @Transactional(readOnly = true)
-    public Optional<ShoppingCart> getShoppingCartById(Long cartId) {
-        return shoppingCartRepository.findById(cartId);
+    public void removeProduct(ShoppingCart cart, Product product) {
+        if (cart != null && product != null) {
+            cart.removeProduct(product);
+        }
     }
 
-
-    @Transactional
-    public void addObserverToCart(Long cartId, CartObserver observer) {
-        ShoppingCart cart = shoppingCartRepository.findById(cartId)
-                .orElseThrow(() -> new IllegalArgumentException("Shopping Cart not found with ID: " + cartId));
-        cart.addObserver(observer);
-        shoppingCartRepository.save(cart);
+    public void addObserver(ShoppingCart cart, CartObserver observer) {
+        if (cart != null && observer != null) {
+            cart.addObserver(observer);
+        }
     }
 }

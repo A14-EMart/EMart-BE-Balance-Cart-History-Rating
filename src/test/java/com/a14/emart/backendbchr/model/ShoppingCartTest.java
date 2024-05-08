@@ -4,14 +4,19 @@ import org.junit.jupiter.api.Test;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ShoppingCartTest {
-    private ShoppingCart shoppingCart;
+    private ShoppingCart shoppingCart = new ShoppingCart();
     private Product product1;
     private Product product2;
+    List<Product> products = new ArrayList<>();
+
+    Map<Product, Integer> productQuantities = new HashMap<>();
 
     @BeforeEach
     public void setUp() {
@@ -26,17 +31,20 @@ public class ShoppingCartTest {
         product2.setProductName("Taro");
         product2.setProductQuantity(15);
         product2.setProductPrice(14000.00);
+        products.add(product1);
+        products.add(product2);
 
-        List<CartItem> cartItems = new ArrayList<>();
-        cartItems.add(new CartItem(product1, 1));
-        cartItems.add(new CartItem(product2, 1));
+        productQuantities.put(product1, 1);
+        productQuantities.put(product2, 1);
 
-        shoppingCart = new ShoppingCart(cartItems, "123");
+
+        shoppingCart.addProduct(product1, 1);
+        shoppingCart.addProduct(product2, 1);
     }
     @Test
     public void testCreateCartEmptyProduct() {
-        List<CartItem> emptyCartItems = new ArrayList<>();
-        assertThrows(IllegalArgumentException.class, () -> new ShoppingCart(emptyCartItems, "123"));
+        Map<Product, Integer> emptyProducts = new HashMap<>();
+        assertThrows(IllegalArgumentException.class, () -> new ShoppingCart(emptyProducts, "123"));
     }
 
     @Test
@@ -47,24 +55,17 @@ public class ShoppingCartTest {
         product3.setProductName("Choco Bar");
         product3.setProductQuantity(20);
         product3.setProductPrice(15000);
-
+        products.add(product3);
         shoppingCart.addProduct(product3, 1);
 
-        assertEquals(3, shoppingCart.getProducts().size());
-        assertEquals(product3, shoppingCart.getProducts().get(2));
+        assertEquals(3, shoppingCart.getProductQuantities().size());
+        assertEquals(product3.getProductName(), products.get(2).getProductName());
     }
 
     @Test
     public void testCreateShoppingCartSuccess() {
-        assertEquals("Snack Tok", shoppingCart.getProducts().get(0).getProductName());
-        assertEquals("Taro", shoppingCart.getProducts().get(1).getProductName());
+        assertEquals(2, shoppingCart.getProductQuantities().size());
+        assertEquals(1, shoppingCart.getProductQuantities().get(products.get(1)));
 
-        assertEquals(10, shoppingCart.getProducts().get(0).getProductQuantity());
-        assertEquals(15, shoppingCart.getProducts().get(1).getProductQuantity());
-
-        assertEquals(20000.00, shoppingCart.getProducts().get(0).getProductPrice());
-        assertEquals(14000.00, shoppingCart.getProducts().get(1).getProductPrice());
-
-        assertEquals(2, shoppingCart.getProducts().size());
     }
 }

@@ -1,21 +1,22 @@
 package com.a14.emart.backendbchr.model;
 import com.a14.emart.backendbchr.observer.CartObserver;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 @Setter
 @Getter
-@Entity
 public class ShoppingCart {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @Transient
+    private List<Product> products = new ArrayList<>();
 
-    @OneToMany(mappedBy = "shoppingCart", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CartItem> items;
+    @Transient
+    private Map<Product, Integer> productQuantities = new HashMap<>();
 
     private String pembeliId;
 
@@ -24,11 +25,10 @@ public class ShoppingCart {
 
     // Constructor
 
-    public ShoppingCart(List<CartItem> items, String pembeliId) {
-        if (items == null || items.isEmpty()) {
+    public ShoppingCart(Map<Product, Integer> productQuantities, String pembeliId) {
+        if (productQuantities == null || productQuantities.isEmpty()) {
             throw new IllegalArgumentException("Product list cannot be empty");
         }
-        this.items = items;
         this.pembeliId = pembeliId;
     }
 
@@ -42,20 +42,25 @@ public class ShoppingCart {
     }
 
     public void addProduct(Product product, int quantity) {
-        for (CartItem item : items) {
-            if (item.getProduct().equals(product)) {
-                item.setQuantity(item.getQuantity() + quantity - 1);
-                notifyObservers();
-                return;
-            }
+        if (productQuantities.containsKey(product)) {
+            productQuantities.put(product, productQuantities.get(product) + quantity);
+        } else {
+            productQuantities.put(product, quantity);
+            products.add(product);
         }
-        CartItem newItem = new CartItem(product, quantity);
-        items.add(newItem);
         notifyObservers();
     }
 
     public void removeProduct(Product product) {
-        items.removeIf(item -> item.getProduct().equals(product));
+        if (productQuantities.containsKey(product)) {
+            int newQuantity = productQuantities.get(product) - 1;
+            if (newQuantity > 0) {
+                productQuantities.put(product, newQuantity);
+            } else {
+                productQuantities.remove(product);
+                products.remove(product);
+            }
+        }
         notifyObservers();
     }
 
@@ -65,12 +70,11 @@ public class ShoppingCart {
 
     // Getters
     public List<Product> getProducts() {
-        List<Product> productList = new ArrayList<>();
-        for (CartItem item : items) {
-            productList.add(item.getProduct());
-        }
-        return productList;
+        return new ArrayList<>(productQuantities.keySet());
     }
 
+    public int getProductQuantity(Product product) {
+        return productQuantities.get(product);
+    }
 }
 
