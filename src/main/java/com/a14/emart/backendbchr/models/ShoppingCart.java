@@ -1,4 +1,5 @@
-package com.a14.emart.backendbchr.model;
+package com.a14.emart.backendbchr.models;
+import com.a14.emart.backendbchr.models.Product;
 import com.a14.emart.backendbchr.observer.CartObserver;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,6 +67,8 @@ public class ShoppingCart {
         notifyObservers();
     }
 
+
+
     public void removeCart(){
         return;
     }
@@ -82,5 +85,6 @@ public class ShoppingCart {
     public int getProductQuantity(Product product) {
         return productQuantities.get(product);
     }
+
 }
 

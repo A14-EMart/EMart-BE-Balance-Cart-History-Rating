@@ -1,7 +1,7 @@
 package com.a14.emart.backendbchr.observer;
 
 import org.springframework.stereotype.Component;
-import com.a14.emart.backendbchr.model.ShoppingCart;
+import com.a14.emart.backendbchr.models.ShoppingCart;
 
 @Component
 public class CartNotificationObserver implements CartObserver {

@@ -1,5 +1,5 @@
 package com.a14.emart.backendbchr.repository;
-import com.a14.emart.backendbchr.model.ShoppingCart;
+import com.a14.emart.backendbchr.models.ShoppingCart;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

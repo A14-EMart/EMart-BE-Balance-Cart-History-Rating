@@ -1,7 +1,7 @@
 package com.a14.emart.backendbchr.service;
 
-import com.a14.emart.backendbchr.model.Product;
-import com.a14.emart.backendbchr.model.ShoppingCart;
+import com.a14.emart.backendbchr.models.Product;
+import com.a14.emart.backendbchr.models.ShoppingCart;
 import com.a14.emart.backendbchr.repository.ShoppingCartRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,12 +11,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 import java.util.*;
-
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ShoppingCartServiceImplTest{

@@ -1,4 +1,6 @@
 package com.a14.emart.backendbchr.model;
+import com.a14.emart.backendbchr.models.Product;
+import com.a14.emart.backendbchr.models.ShoppingCart;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

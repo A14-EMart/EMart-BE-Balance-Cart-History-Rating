@@ -1,10 +1,9 @@
 package com.a14.emart.backendbchr.service;
-import com.a14.emart.backendbchr.model.Product;
-import com.a14.emart.backendbchr.model.ShoppingCart;
+import com.a14.emart.backendbchr.models.Product;
+import com.a14.emart.backendbchr.models.ShoppingCart;
 import com.a14.emart.backendbchr.observer.CartObserver;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 public interface ShoppingCartService {
@@ -14,5 +13,7 @@ public interface ShoppingCartService {
     public void addObserver(String pembeliId, CartObserver observer);
     ShoppingCart clearShoppingCart(ShoppingCart shoppingCart);
     public void checkoutKeranjang(HashMap<String, Integer> productQuantities);
+
+   Optional<ShoppingCart> findById(String pembeliId);
 
 }

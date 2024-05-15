@@ -1,4 +1,4 @@
-package com.a14.emart.backendbchr.model;
+package com.a14.emart.backendbchr.models;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
