@@ -3,12 +3,16 @@ import com.a14.emart.backendbchr.model.Product;
 import com.a14.emart.backendbchr.model.ShoppingCart;
 import com.a14.emart.backendbchr.observer.CartObserver;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 public interface ShoppingCartService {
-    ShoppingCart addProductToCart(Long cartId, Product product, int quantity);
-    public void removeProductFromCart(Long cartId, Product product);
-    public Optional<ShoppingCart> getShoppingCartById(Long cartId);
-    public void addObserverToCart(Long cartId, CartObserver observer);
+    ShoppingCart createShoppingCart(ShoppingCart shoppingCart);
+    void addProduct(Product product, int quantity, String pembeliId);
+    public void removeProductCart(Product product, String pembeliId);
+    public void addObserver(String pembeliId, CartObserver observer);
+    ShoppingCart clearShoppingCart(ShoppingCart shoppingCart);
+    public void checkoutKeranjang(HashMap<String, Integer> productQuantities);
 
 }

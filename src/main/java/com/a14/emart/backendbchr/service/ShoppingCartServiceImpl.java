@@ -6,36 +6,60 @@ import com.a14.emart.backendbchr.observer.CartObserver;
 import com.a14.emart.backendbchr.repository.ShoppingCartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class ShoppingCartServiceImpl {
+public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Autowired
     private ShoppingCartRepository shoppingCartRepository;
-
-    public ShoppingCart createShoppingCart(String pembeliId) {
-        return new ShoppingCart(new HashMap<>(), pembeliId);
+    @Autowired
+    public ShoppingCartServiceImpl(ShoppingCartRepository shoppingCartRepository) {
+        this.shoppingCartRepository = shoppingCartRepository;
+    }
+    public ShoppingCart createShoppingCart(ShoppingCart shoppingCart) {
+        return shoppingCart;
     }
 
-    public void addProduct(ShoppingCart cart, Product product, int quantity) {
-        if (cart != null && product != null) {
-            cart.addProduct(product, quantity);
-        }
+    @Override
+    public void addProduct(Product product, int quantity, String pembeliId) {
+        Map<Product, Integer> productQuantities = new HashMap<>();
+        ShoppingCart cart = new ShoppingCart();
+        cart.addProduct(product, quantity);
+        shoppingCartRepository.save(cart);
     }
 
-    public void removeProduct(ShoppingCart cart, Product product) {
-        if (cart != null && product != null) {
+    @Override
+    public void removeProductCart(Product product, String pembeliId) {
+        ShoppingCart cart = shoppingCartRepository.findById(pembeliId).orElse(null);
+        if (cart != null) {
             cart.removeProduct(product);
+            shoppingCartRepository.save(cart);
         }
     }
 
-    public void addObserver(ShoppingCart cart, CartObserver observer) {
-        if (cart != null && observer != null) {
+    @Override
+    public void checkoutKeranjang(HashMap<String, Integer> productQuantities) {
+        List list_produk = (List) productQuantities.keySet();
+        Product product;
+
+    }
+
+    @Override
+    public void addObserver(String pembeliId, CartObserver observer) {
+        ShoppingCart cart = shoppingCartRepository.findById(pembeliId).orElse(null);
+        if (cart != null) {
             cart.addObserver(observer);
+            shoppingCartRepository.save(cart);
         }
+    }
+
+    @Override
+    public ShoppingCart clearShoppingCart(ShoppingCart shoppingCart) {
+        return null;
     }
 }

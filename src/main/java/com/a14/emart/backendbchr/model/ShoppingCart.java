@@ -20,6 +20,8 @@ public class ShoppingCart {
 
     private String pembeliId;
 
+    @Setter
+    private String supermarketId;
     @Transient
     private List<CartObserver> observers = new ArrayList<>();
 
@@ -62,6 +64,10 @@ public class ShoppingCart {
             }
         }
         notifyObservers();
+    }
+
+    public void removeCart(){
+        return;
     }
 
     public void addObserver(CartObserver observer) {
