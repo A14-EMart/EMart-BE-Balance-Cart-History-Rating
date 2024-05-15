@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -11,7 +12,7 @@ import java.math.BigDecimal;
 @Table(name="BALANCE")
 public class Balance {
     @Id @Column(name = "USERID", nullable = false)
-    private Long userId;
+    private UUID userId;
 
     @Column(name = "NOMINAL", nullable = false)
     private BigDecimal nominal;
@@ -20,7 +21,7 @@ public class Balance {
         // Default
     }
 
-    public Balance(Long userId, BigDecimal nominal) {
+    public Balance(UUID userId, BigDecimal nominal) {
         this.userId = userId;
         this.nominal = nominal;
     }
