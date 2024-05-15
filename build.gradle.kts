@@ -33,7 +33,7 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	runtimeOnly("org.postgresql:postgresql")
-
+	runtimeOnly("io.micrometer:micrometer-registry-prometheus")
 }
 
 tasks.register<Test>("unitTest") {
