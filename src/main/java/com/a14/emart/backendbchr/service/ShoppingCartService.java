@@ -7,13 +7,13 @@ import java.util.HashMap;
 import java.util.Optional;
 
 public interface ShoppingCartService {
-    ShoppingCart createShoppingCart(ShoppingCart shoppingCart);
-    void addProduct(Product product, int quantity, String pembeliId);
-    public void removeProductCart(Product product, String pembeliId);
-    public void addObserver(String pembeliId, CartObserver observer);
-    ShoppingCart clearShoppingCart(ShoppingCart shoppingCart);
-    public void checkoutKeranjang(HashMap<String, Integer> productQuantities);
+    public ShoppingCart createShoppingCart(String pembeliId);
+    public Optional<ShoppingCart> getShoppingCart(String pembeliId);
+    public ShoppingCart addItemToCart(String pembeliId, String productId, String supermarketId);
+    public ShoppingCart removeItemFromCart(String pembeliId, String productId);
+//    ShoppingCart clearShoppingCart(ShoppingCart shoppingCart);
+//    public void checkoutKeranjang(HashMap<String, Integer> productQuantities);
 
-   Optional<ShoppingCart> findById(String pembeliId);
+
 
 }
