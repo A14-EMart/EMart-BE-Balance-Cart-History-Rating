@@ -1,6 +1,5 @@
 package com.a14.emart.backendbchr.service;
 
-import com.a14.emart.backendbchr.model.Pembeli;
 import com.a14.emart.backendbchr.model.Transaction;
 import com.a14.emart.backendbchr.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,28 +13,24 @@ public class TransactionServiceImpl implements TransactionService{
 
     @Autowired
     TransactionRepository transactionRepository;
+
     @Override
     public Transaction create(Transaction transaction) {
         return transactionRepository.save(transaction);
     }
 
     @Override
-    public List<Transaction> findAll() {
-        return transactionRepository.findAll();
+    public List<Transaction> findByBuyer(UUID buyerId) {
+        return transactionRepository.findTransactionByPembeliId(buyerId);
     }
 
     @Override
-    public Transaction findById(UUID id) {
-        return transactionRepository.findById(id).orElse(null);
+    public List<Transaction> findyByBuyerPerSupermarket(UUID buyerId, UUID supermarketId) {
+        return transactionRepository.findTransactionByPembeliIdAndSupermarketId(buyerId, supermarketId);
     }
 
     @Override
-    public List<Transaction> findByBuyer(Pembeli pembeli) {
-        return transactionRepository.findTransactionByPembeli(pembeli);
-    }
-
-    @Override
-    public void deleteById(UUID id) {
-        transactionRepository.deleteById(id);
+    public List<Transaction> findBySupermarket(UUID supermarketId) {
+        return transactionRepository.findTransactionBySupermarketId(supermarketId);
     }
 }
