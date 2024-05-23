@@ -1,6 +1,5 @@
 package com.a14.emart.backendbchr.models;
 import com.a14.emart.backendbchr.models.Product;
-import com.a14.emart.backendbchr.observer.CartObserver;
 
 import java.util.*;
 
