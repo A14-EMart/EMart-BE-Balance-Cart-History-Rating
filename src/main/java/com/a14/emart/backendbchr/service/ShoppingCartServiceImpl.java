@@ -3,7 +3,7 @@ package com.a14.emart.backendbchr.service;
 import com.a14.emart.backendbchr.models.CartItem;
 import com.a14.emart.backendbchr.models.Product;
 import com.a14.emart.backendbchr.models.ShoppingCart;
-import com.a14.emart.backendbchr.observer.CartObserver;
+
 import com.a14.emart.backendbchr.repository.CartItemRepository;
 import com.a14.emart.backendbchr.repository.ShoppingCartRepository;
 import jakarta.transaction.Transactional;

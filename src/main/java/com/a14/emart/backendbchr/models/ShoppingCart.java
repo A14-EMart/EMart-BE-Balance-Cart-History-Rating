@@ -13,7 +13,6 @@ import lombok.Setter;
 @Table(name = "shoppingCart")
 public class ShoppingCart {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String pembeliId;
 
     @Setter

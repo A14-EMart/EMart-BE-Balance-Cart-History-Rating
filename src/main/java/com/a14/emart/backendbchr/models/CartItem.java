@@ -22,7 +22,7 @@ public class CartItem {
     private int amount;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "pembeliId", nullable = false)
+    @JoinColumn(name = "Id", nullable = false)
     private ShoppingCart shoppingCart;
 
     public static CartItemBuilder getBuilder(){

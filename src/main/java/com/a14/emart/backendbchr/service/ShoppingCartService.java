@@ -1,7 +1,7 @@
 package com.a14.emart.backendbchr.service;
 import com.a14.emart.backendbchr.models.Product;
 import com.a14.emart.backendbchr.models.ShoppingCart;
-import com.a14.emart.backendbchr.observer.CartObserver;
+
 
 import java.util.HashMap;
 import java.util.Optional;
