@@ -17,19 +17,19 @@ public class ShoppingCartTest {
     void setUp() {
         // Initialize the shopping cart
         shoppingCart = ShoppingCart.getBuilder()
-                .setPembeliId("buyer123")
+                .setPembeliId(1L)
                 .setSupermarketId("supermarket456")
                 .build();
 
         // Initialize cart items
         item1 = CartItem.getBuilder()
-                .setPembeliId("buyer123")
+                .setPembeliId(1L)
                 .setProductId("product789")
                 .setAmount(2)
                 .build();
 
         item2 = CartItem.getBuilder()
-                .setPembeliId("buyer123")
+                .setPembeliId(1L)
                 .setProductId("product101")
                 .setAmount(1)
                 .build();
@@ -37,7 +37,7 @@ public class ShoppingCartTest {
 
     @Test
     public void testShoppingCart() {
-        String pembeliId = UUID.randomUUID().toString();
+        Long pembeliId = 1L;
         String supermarketId = UUID.randomUUID().toString();
 
         ShoppingCart shoppingCart = new ShoppingCartBuilder()

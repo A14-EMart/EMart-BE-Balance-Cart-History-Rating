@@ -13,7 +13,7 @@ import lombok.Setter;
 @Table(name = "shoppingCart")
 public class ShoppingCart {
     @Id
-    private String pembeliId;
+    private Long pembeliId;
 
     @Setter
     private String supermaketId;

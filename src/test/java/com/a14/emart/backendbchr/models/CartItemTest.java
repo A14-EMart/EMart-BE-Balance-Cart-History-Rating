@@ -10,7 +10,7 @@ class CartItemTest {
 
     @Test
     void testCartItemBuilder() {
-        String expectedPembeliId = "pembeli123";
+        Long expectedPembeliId = 2L;
         String expectedProductId = "product456";
         int expectedAmount = 10;
 

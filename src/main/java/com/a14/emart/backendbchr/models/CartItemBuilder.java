@@ -1,11 +1,11 @@
 package com.a14.emart.backendbchr.models;
 
 public class CartItemBuilder {
-    private String pembeliId;
+    private Long pembeliId;
     private String productId;
     private int amount;
 
-    public CartItemBuilder setPembeliId(String pembeliId){
+    public CartItemBuilder setPembeliId(Long pembeliId){
         this.pembeliId = pembeliId;
         return this;
     }

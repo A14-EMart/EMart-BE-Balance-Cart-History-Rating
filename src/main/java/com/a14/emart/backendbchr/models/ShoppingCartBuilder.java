@@ -4,9 +4,9 @@ import java.util.Stack;
 import java.util.UUID;
 
 public class ShoppingCartBuilder {
-    private String pembeliId;
+    private Long pembeliId;
     private String supermarketId;
-    public ShoppingCartBuilder setPembeliId(String pembeliId){
+    public ShoppingCartBuilder setPembeliId(Long pembeliId){
         this.pembeliId = pembeliId;
         return this;
     }

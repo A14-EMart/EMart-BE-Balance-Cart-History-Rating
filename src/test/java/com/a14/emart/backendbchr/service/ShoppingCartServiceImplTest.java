@@ -37,12 +37,12 @@ class ShoppingCartServiceImplTest {
         MockitoAnnotations.openMocks(this);
 
         shoppingCart = ShoppingCart.getBuilder()
-                .setPembeliId("buyer123")
+                .setPembeliId(1L)
                 .setSupermarketId("supermarket456")
                 .build();
 
         cartItem = CartItem.getBuilder()
-                .setPembeliId("buyer123")
+                .setPembeliId(1L)
                 .setProductId("product789")
                 .setAmount(2)
                 .build();
@@ -52,48 +52,50 @@ class ShoppingCartServiceImplTest {
     void testCreateShoppingCart() {
         when(shoppingCartRepository.save(any(ShoppingCart.class))).thenReturn(shoppingCart);
 
-        ShoppingCart createdCart = shoppingCartService.createShoppingCart("buyer123");
+        ShoppingCart createdCart = shoppingCartService.createShoppingCart(1L);
 
         assertNotNull(createdCart);
-        assertEquals("buyer123", createdCart.getPembeliId());
+        assertEquals(1L, createdCart.getPembeliId());
         verify(shoppingCartRepository, times(1)).save(any(ShoppingCart.class));
     }
 
     @Test
     void testGetShoppingCart() {
-        when(shoppingCartRepository.findById("buyer123")).thenReturn(Optional.of(shoppingCart));
 
-        Optional<ShoppingCart> retrievedCart = shoppingCartService.getShoppingCart("buyer123");
+            Long pembeliId = 1L;
+            when(shoppingCartRepository.findShoppingCartByPembeliId(pembeliId)).thenReturn(Optional.of(shoppingCart));
 
-        assertTrue(retrievedCart.isPresent());
-        assertEquals(shoppingCart, retrievedCart.get());
-        verify(shoppingCartRepository, times(1)).findById("buyer123");
+            Optional<ShoppingCart> result = shoppingCartService.getShoppingCart(pembeliId);
+
+            assertTrue(result.isPresent(), "Shopping cart should be present");
+            assertEquals(shoppingCart, result.get(), "The shopping cart returned should match the mock shopping cart");
     }
+
 
     @Test
     void testAddItemToCart() {
         shoppingCart.addItem(cartItem);
-        when(shoppingCartRepository.findById("buyer123")).thenReturn(Optional.of(shoppingCart));
+        when(shoppingCartRepository.findShoppingCartByPembeliId(1L)).thenReturn(Optional.of(shoppingCart));
         when(cartItemRepository.save(any(CartItem.class))).thenReturn(cartItem);
         when(shoppingCartRepository.save(any(ShoppingCart.class))).thenReturn(shoppingCart);
 
-        ShoppingCart updatedCart = shoppingCartService.addItemToCart("buyer123", "newProduct", "supermarket456");
+        ShoppingCart updatedCart = shoppingCartService.addItemToCart(1L, "newProduct", "supermarket456");
 
         assertNotNull(updatedCart);
         assertEquals(2, updatedCart.getItems().size());
         assertTrue(updatedCart.getItems().stream().anyMatch(item -> item.getProductId().equals("newProduct") && item.getAmount() == 1));
-        verify(shoppingCartRepository, times(1)).findById("buyer123");
+        verify(shoppingCartRepository, times(1)).findShoppingCartByPembeliId(1L);
         verify(cartItemRepository, times(1)).save(any(CartItem.class));
         verify(shoppingCartRepository, times(1)).save(any(ShoppingCart.class));
     }
     @Test
     void testAddItemToCart_ExistingItem() {
-        String pembeliId = "pembeli1";
+        Long pembeliId = 2L;
         String productId = "product1";
         String supermarketId = "supermarket1";
 
         CartItem existingItem = new CartItem();
-        existingItem.setPembeliId(pembeliId);
+        existingItem.setPembeliId(2L);
         existingItem.setProductId(productId);
         existingItem.setAmount(1);
 
@@ -105,7 +107,7 @@ class ShoppingCartServiceImplTest {
         existingCart.setSupermaketId(supermarketId);
         existingCart.setItems(cartItems);
 
-        when(shoppingCartRepository.findById(pembeliId)).thenReturn(Optional.of(existingCart));
+        when(shoppingCartRepository.findShoppingCartByPembeliId(2L)).thenReturn(Optional.of(existingCart));
         when(shoppingCartRepository.save(any(ShoppingCart.class))).thenReturn(existingCart);
 
         ShoppingCart updatedCart = shoppingCartService.addItemToCart(pembeliId, productId, supermarketId);
@@ -120,7 +122,7 @@ class ShoppingCartServiceImplTest {
 
     @Test
     public void testAddItemToCart_ExistingCart_DifferentSupermarket() {
-        String pembeliId = "pembeli1";
+        Long pembeliId = 2L;
         String productId = "product1";
         String supermarketId = "supermarket1";
         String differentSupermarketId = "supermarket2";
@@ -130,7 +132,7 @@ class ShoppingCartServiceImplTest {
         existingCart.setSupermaketId(differentSupermarketId);
         existingCart.setItems(new ArrayList<>());
 
-        when(shoppingCartRepository.findById(pembeliId)).thenReturn(Optional.of(existingCart));
+        when(shoppingCartRepository.findShoppingCartByPembeliId(2L)).thenReturn(Optional.of(existingCart));
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             shoppingCartService.addItemToCart(pembeliId, productId, supermarketId);
@@ -142,7 +144,7 @@ class ShoppingCartServiceImplTest {
 
     @Test
     void testRemoveItemFromCart_decrementAmount() {
-        String pembeliId = "pembeli1";
+        Long pembeliId = 2L;
         String productId = "product1";
 
         CartItem cartItem = new CartItem();
@@ -158,7 +160,7 @@ class ShoppingCartServiceImplTest {
         existingCart.setSupermaketId("supermarket1");
         existingCart.setItems(cartItems);
 
-        when(shoppingCartRepository.findById(pembeliId)).thenReturn(Optional.of(existingCart));
+        when(shoppingCartRepository.findShoppingCartByPembeliId(2L)).thenReturn(Optional.of(existingCart));
         when(shoppingCartRepository.save(any(ShoppingCart.class))).thenReturn(existingCart);
 
         ShoppingCart updatedCart = shoppingCartService.removeItemFromCart(pembeliId, productId);
@@ -172,7 +174,7 @@ class ShoppingCartServiceImplTest {
 
     @Test
     public void testRemoveItemFromCart_RemoveItem() {
-        String pembeliId = "pembeli1";
+        Long pembeliId = 2L;
         String productId = "product1";
 
         CartItem cartItem = new CartItem();
@@ -188,7 +190,7 @@ class ShoppingCartServiceImplTest {
         existingCart.setSupermaketId("supermarket1");
         existingCart.setItems(cartItems);
 
-        when(shoppingCartRepository.findById(pembeliId)).thenReturn(Optional.of(existingCart));
+        when(shoppingCartRepository.findShoppingCartByPembeliId(pembeliId)).thenReturn(Optional.of(existingCart));
         when(shoppingCartRepository.save(any(ShoppingCart.class))).thenReturn(existingCart);
 
         ShoppingCart updatedCart = shoppingCartService.removeItemFromCart(pembeliId, productId);

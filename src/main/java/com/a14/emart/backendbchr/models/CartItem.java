@@ -13,7 +13,7 @@ import java.util.UUID;
 public class CartItem {
     @Id
     @Column(name = "pembeliId")
-    private String pembeliId;
+    private Long pembeliId;
 
     @Column(name = "productId")
     private String productId;

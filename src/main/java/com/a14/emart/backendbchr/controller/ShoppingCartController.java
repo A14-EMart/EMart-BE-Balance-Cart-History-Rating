@@ -2,10 +2,13 @@ package com.a14.emart.backendbchr.controller;
 import com.a14.emart.backendbchr.models.ShoppingCart;
 import com.a14.emart.backendbchr.service.*;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.Optional;
 
@@ -13,25 +16,27 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/shopping-cart")
 public class ShoppingCartController {
-//    @Value("${spring.route.gateway_url}")
-//    private String GATEWAY_URL;
-
-
+    @Autowired
     private JwtService jwtService;
 
     @Autowired
     private ShoppingCartService shoppingCartService;
 
+    @Autowired
+    private  ProductService productService;
     @PostMapping("/create")
-    public ResponseEntity<ShoppingCart> createShoppingCart(@RequestHeader("Authorization") String token) {
-        String jwt = token.substring(7); // Remove "Bearer " prefix
+    public ResponseEntity<ShoppingCart> createShoppingCart(@RequestHeader("Authorization") String token) throws IllegalAccessException {
+        String jwt = token.replace("Bearer ", "");
+        if (!jwtService.extractRole(jwt).equalsIgnoreCase("customer")) {
+            throw new IllegalAccessException("You have no access.");
+        }
         Long userId = jwtService.extractUserId(jwt);
-        ShoppingCart shoppingCart = shoppingCartService.createShoppingCart(userId.toString());
+        ShoppingCart shoppingCart = shoppingCartService.createShoppingCart(userId);
         return ResponseEntity.ok(shoppingCart);
     }
 
     @GetMapping("/{pembeliId}")
-    public ResponseEntity<ShoppingCart> getShoppingCart(@PathVariable String pembeliId) {
+    public ResponseEntity<ShoppingCart> getShoppingCart(@PathVariable Long pembeliId) {
         Optional<ShoppingCart> shoppingCart = shoppingCartService.getShoppingCart(pembeliId);
         return shoppingCart.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -41,9 +46,9 @@ public class ShoppingCartController {
             @RequestHeader("Authorization") String token,
             @RequestParam String productId,
             @RequestParam String supermarketId) {
-        String jwt = token.substring(7); // Remove "Bearer " prefix
+        String jwt = token.replace("Bearer ", "");   // Remove "Bearer " prefix
         Long userId = jwtService.extractUserId(jwt);
-        ShoppingCart shoppingCart = shoppingCartService.addItemToCart(userId.toString(), productId, supermarketId);
+        ShoppingCart shoppingCart = shoppingCartService.addItemToCart(userId, productId, supermarketId);
         return ResponseEntity.ok(shoppingCart);
     }
 
@@ -51,9 +56,9 @@ public class ShoppingCartController {
     public ResponseEntity<ShoppingCart> removeItemFromCart(
             @RequestHeader("Authorization") String token,
             @RequestParam String productId) {
-        String jwt = token.substring(7); // Remove "Bearer " prefix
+        String jwt = token.replace("Bearer ", "");
         Long userId = jwtService.extractUserId(jwt);
-        ShoppingCart shoppingCart = shoppingCartService.removeItemFromCart(userId.toString(), productId);
+        ShoppingCart shoppingCart = shoppingCartService.removeItemFromCart(userId, productId);
         return ResponseEntity.ok(shoppingCart);
     }
 

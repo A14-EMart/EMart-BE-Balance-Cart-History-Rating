@@ -1,5 +1,6 @@
 package com.a14.emart.backendbchr.service;
 
+import com.a14.emart.backendbchr.dto.GetProductResponse;
 import com.a14.emart.backendbchr.models.CartItem;
 import com.a14.emart.backendbchr.models.Product;
 import com.a14.emart.backendbchr.models.ShoppingCart;
@@ -28,8 +29,11 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Autowired
     private CartItemRepository cartItemRepository;
 
+    @Autowired
+    private ProductService productService;
+
     @Override
-    public ShoppingCart createShoppingCart(String pembeliId) {
+    public ShoppingCart createShoppingCart(Long pembeliId) {
         ShoppingCart shoppingCart = ShoppingCart.getBuilder()
                 .setPembeliId(pembeliId)
                 .setSupermarketId(null)
@@ -38,14 +42,14 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public Optional<ShoppingCart> getShoppingCart(String pembeliId) {
-        return shoppingCartRepository.findById(pembeliId);
+    public Optional<ShoppingCart> getShoppingCart(Long pembeliId) {
+        return shoppingCartRepository.findShoppingCartByPembeliId(pembeliId);
     }
 
     @Override
     @Transactional
-    public ShoppingCart addItemToCart(String pembeliId, String productId, String supermarketId) {
-        ShoppingCart shoppingCart = shoppingCartRepository.findById(pembeliId)
+    public ShoppingCart addItemToCart(Long pembeliId, String productId, String supermarketId) {
+        ShoppingCart shoppingCart = shoppingCartRepository.findShoppingCartByPembeliId(pembeliId)
                 .orElseGet(() -> {
                     ShoppingCart newCart = new ShoppingCart();
                     newCart.setPembeliId(pembeliId);
@@ -58,6 +62,16 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             throw new RuntimeException("All items in the cart must be from the same supermarket");
         }else if(shoppingCart.getSupermaketId()==null){
             shoppingCart.setSupermaketId(supermarketId);
+        }
+
+        GetProductResponse productResponse = productService.getProductById(productId);
+        if (productResponse == null) {
+            throw new IllegalArgumentException("Product not found");
+        }
+
+        Integer stock = productResponse.getStock();
+        if (stock == 0) {
+            throw new IllegalArgumentException("Product is out of stock");
         }
 
         Optional<CartItem> existingItem = shoppingCart.getItems().stream()
@@ -92,8 +106,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     @Transactional
-    public ShoppingCart removeItemFromCart(String pembeliId, String productId) {
-        ShoppingCart shoppingCart = shoppingCartRepository.findById(pembeliId)
+    public ShoppingCart removeItemFromCart(Long pembeliId, String productId) {
+        ShoppingCart shoppingCart = shoppingCartRepository.findShoppingCartByPembeliId(pembeliId)
                 .orElseThrow(() -> new RuntimeException("ShoppingCart not found"));
 
         CartItem cartItem = shoppingCart.getItems().stream()
