@@ -4,9 +4,11 @@ import com.a14.emart.backendbchr.models.Product;
 import java.util.*;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+@Data
 @Setter
 @Getter
 @Entity
