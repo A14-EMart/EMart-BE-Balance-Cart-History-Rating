@@ -8,13 +8,16 @@ import java.util.UUID;
 
 public class BalanceTest {
     private Balance balance;
-    UUID userId;
+    private UUID userId;
 
     @BeforeEach
     public void setUp() {
         this.userId = UUID.randomUUID();
         BigDecimal nominal = BigDecimal.valueOf(20000);
-        this.balance = new Balance(userId, nominal);
+        this.balance = Balance.getBuilder()
+                .setUserId(this.userId)
+                .setNominal(nominal)
+                .build();
     }
 
     @Test
