@@ -2,6 +2,7 @@ package com.a14.emart.backendbchr.controller;
 
 import com.a14.emart.backendbchr.dto.BalanceDTO;
 import com.a14.emart.backendbchr.dto.BalanceRequestDTO;
+import com.a14.emart.backendbchr.dto.TransferRequestDTO;
 import com.a14.emart.backendbchr.service.BalanceService;
 import com.a14.emart.backendbchr.controller.ApiResponse;
 
@@ -69,6 +70,18 @@ public class BalanceController {
         try {
             balanceService.createBalance(request.getUserId());
             ApiResponse<String> response = new ApiResponse<>(true, "Balance created successfully", null);
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            ApiResponse<String> response = new ApiResponse<>(false, e.getMessage(), null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+    }
+
+    @PostMapping("/transfer")
+    public ResponseEntity<ApiResponse<String>> transferBalance(@RequestBody TransferRequestDTO request) {
+        try {
+            balanceService.transferBalance(request);
+            ApiResponse<String> response = new ApiResponse<>(true, "Transfer successful", null);
             return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
             ApiResponse<String> response = new ApiResponse<>(false, e.getMessage(), null);

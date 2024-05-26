@@ -2,6 +2,7 @@ package com.a14.emart.backendbchr.service;
 
 import com.a14.emart.backendbchr.dto.BalanceDTO;
 import com.a14.emart.backendbchr.dto.BalanceRequestDTO;
+import com.a14.emart.backendbchr.dto.TransferRequestDTO;
 import com.a14.emart.backendbchr.models.Balance;
 import com.a14.emart.backendbchr.models.BalanceBuilder;
 import com.a14.emart.backendbchr.repository.BalanceRepository;
@@ -80,5 +81,31 @@ public class BalanceServiceImpl implements BalanceService {
                 .build();
 
         balanceRepository.save(balance);
+    }
+
+    @Override
+    @Transactional
+    public void transferBalance(TransferRequestDTO request) {
+        Balance fromBalance = balanceRepository.findByUserId(request.getFromUserId());
+        Balance toBalance = balanceRepository.findByUserId(request.getToUserId());
+
+        if (fromBalance == null) {
+            throw new RuntimeException("Balance not found for user: " + request.getFromUserId());
+        }
+
+        if (toBalance == null) {
+            throw new RuntimeException("Balance not found for user: " + request.getToUserId());
+        }
+
+        BigDecimal newFromBalance = fromBalance.getNominal().subtract(request.getAmount());
+        if (newFromBalance.compareTo(BigDecimal.ZERO) < 0) {
+            throw new RuntimeException("Insufficient balance for transfer");
+        }
+
+        fromBalance.setNominal(newFromBalance);
+        toBalance.setNominal(toBalance.getNominal().add(request.getAmount()));
+
+        balanceRepository.save(fromBalance);
+        balanceRepository.save(toBalance);
     }
 }
