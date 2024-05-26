@@ -126,5 +126,38 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return shoppingCartRepository.save(shoppingCart);
     }
 
+    @Override
+    public double calculateTotalPrice(Long pembeliId) {
+        ShoppingCart shoppingCart = shoppingCartRepository.findShoppingCartByPembeliId(pembeliId)
+                .orElseThrow(() -> new RuntimeException("ShoppingCart not found"));
+
+        return shoppingCart.getItems().stream()
+                .mapToDouble(item -> {
+                    GetProductResponse productResponse = productService.getProductById(item.getProductId());
+                    return item.getAmount() * productResponse.getPrice();
+                })
+                .sum();
+    }
+
+    @Override
+    public ShoppingCart clearShoppingCart(Long pembeliId) {
+        Optional<ShoppingCart> optionalCart = shoppingCartRepository.findShoppingCartByPembeliId(pembeliId);
+        if (!optionalCart.isPresent()) {
+            throw new IllegalArgumentException("Shopping cart not found for pembeliId: " + pembeliId);
+            // Or alternatively, return a new empty cart:
+            // return new ShoppingCart();
+        }
+
+        ShoppingCart shoppingCart = optionalCart.get();
+        List<CartItem> cartItems = shoppingCart.getItems();
+
+        for (CartItem item : cartItems) {
+            cartItemRepository.delete(item);
+        }
+        cartItems.clear();
+        shoppingCart.setSupermaketId(null);
+
+        return shoppingCartRepository.save(shoppingCart);}
+
 
 }

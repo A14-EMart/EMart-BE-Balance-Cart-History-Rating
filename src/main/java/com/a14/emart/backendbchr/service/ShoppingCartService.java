@@ -11,8 +11,8 @@ public interface ShoppingCartService {
     public Optional<ShoppingCart> getShoppingCart(Long pembeliId);
     public ShoppingCart addItemToCart(Long pembeliId, String productId, String supermarketId);
     public ShoppingCart removeItemFromCart(Long pembeliId, String productId);
-
-//    ShoppingCart clearShoppingCart(ShoppingCart shoppingCart);
+    public double calculateTotalPrice(Long pembeliId);
+    ShoppingCart clearShoppingCart(Long pembeliId);
 //    public void checkoutKeranjang(HashMap<String, Integer> productQuantities);
 
 
