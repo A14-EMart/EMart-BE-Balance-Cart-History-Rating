@@ -27,17 +27,7 @@ public class ShoppingCartController {
 
     @Autowired
     private ProductService productService;
-    //    @PostMapping("/create")
-//    public ResponseEntity<ShoppingCart> createShoppingCart(
-//            @RequestHeader(value = "Authorization") String token) throws IllegalAccessException {
-//        String jwt = token.replace("Bearer ", "");
-//        if (!jwtService.extractRole(jwt).equalsIgnoreCase("customer")) {
-//            throw new IllegalAccessException("You have no access.");
-//        }
-//        Long userId = jwtService.extractUserId(jwt);
-//        ShoppingCart shoppingCart = shoppingCartService.createShoppingCart(userId);
-//        return ResponseEntity.ok(shoppingCart);
-//    }
+
     @PostMapping("/create")
     public ResponseEntity<ApiResponse<ShoppingCart>> createShoppingCart(
             @RequestParam("userId") Long userId,

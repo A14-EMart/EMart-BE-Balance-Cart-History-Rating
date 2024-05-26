@@ -47,36 +47,28 @@ public class TransactionController {
             String tokenWithoutBearer = token.replace("Bearer ", "");
             String role = jwtService.extractRole(tokenWithoutBearer);
             Long id = jwtService.extractUserId(tokenWithoutBearer);
-            System.out.println(role);
-            System.out.println(id);
 
             if (!role.equalsIgnoreCase("customer")) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
                         .body(new ApiResponse<>(false, null, "You have no access"));
             }
-            System.out.println("AMAN DARI ROLE");
 
             Optional<ShoppingCart> buyerCart = shoppingCartServices.getShoppingCart(id);
             if (buyerCart.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(new ApiResponse<>(false, null, "Shopping cart not found"));
             }
-            System.out.println("SHOPPING CART AMAN");
 
             if (buyerCart.get().getItems().isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(new ApiResponse<>(false, null, "Shopping cart is empty"));
             }
-            System.out.println("SHOPPING CART MASIH AMAN");
 
             if (!Objects.equals(buyerCart.get().getPembeliId(), jwtService.extractUserId(tokenWithoutBearer))) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
                         .body(new ApiResponse<>(false, null, "Error when fetching cart"));
             }
-            System.out.println("SHOPPING CART SELALU AMAN");
 
-            System.out.println("INI CART PEMBELI =>" + buyerCart);
-            System.out.println("INI ISINYA =>" + buyerCart.get().getItems().size());
             List<CartItem> items = buyerCart.get().getItems();
             List<ProductInTransaction> products = new ArrayList<>();
             ProductInTransaction tempProduct;
@@ -89,7 +81,6 @@ public class TransactionController {
                     .build()
                 );
             }
-            System.out.println("PRODUCT IN TRANSACTION KEBUAT");
 
             for (ProductInTransaction product : products) {
                 GetProductResponse productResponse = productService.getProductById(UUID.fromString(product.getId()));
@@ -98,36 +89,21 @@ public class TransactionController {
                     product.setPrice(productResponse.getPrice());
                 }
             }
-            System.out.println("PRODUCT IN TRANSACTION SELESAI");
-
 
             long totalPrice = 0;
             for (ProductInTransaction product : products) {
                 long price = product.getTotalPrice();
                 totalPrice += price;
             }
-            System.out.println("HITUNG HARGA SELESAI\n");
-            System.out.println("MASIH AMANN");
+
             String stringSupermarketId = buyerCart.get().getSupermaketId();
             stringSupermarketId = stringSupermarketId.replace("\"", "");
-            System.out.println("Lewat");
             UUID supermarketId = UUID.fromString(stringSupermarketId);
-            System.out.println("LETSGOOOO AMAN");
 
-            System.out.println();
-
-            GetSupermarketResponse supermarketResponse = null;
-            try {
-                supermarketResponse = supermarketService.getSupermarketById(supermarketId);
-            } catch (Exception e) {
-                System.out.println("GAGAL FETCH NAMA SUPERMARKET");
-            }
-
-            assert supermarketResponse != null;
+            GetSupermarketResponse supermarketResponse = supermarketService.getSupermarketById(supermarketId);
             String supermarketName = supermarketResponse.getName();
-            System.out.println("INI NAMA SUPERMARKETNYA =>" + supermarketName);
-            String username = "DIDI";
 
+            String username = "DIDI";
             Transaction transaction = Transaction.builder()
                     .supermarketId(supermarketResponse.getId())
                     .supermarketName(supermarketName)
@@ -250,12 +226,4 @@ public class TransactionController {
         }
 
     }
-
-
-    @GetMapping("/get-supermarket/{id}")
-    public ResponseEntity<ApiResponse<GetSupermarketResponse>> getSupermarket(@PathVariable UUID id) {
-        GetSupermarketResponse supermarketResponse = supermarketService.getSupermarketById(id);
-        return ResponseEntity.ok(new ApiResponse<>(true, supermarketResponse, "Get Supermarket successfull"));
-    }
-
 }

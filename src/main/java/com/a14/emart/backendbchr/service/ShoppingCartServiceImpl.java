@@ -2,15 +2,12 @@ package com.a14.emart.backendbchr.service;
 
 import com.a14.emart.backendbchr.DTO.GetProductResponse;
 import com.a14.emart.backendbchr.models.CartItem;
-import com.a14.emart.backendbchr.models.Product;
 import com.a14.emart.backendbchr.models.ShoppingCart;
-
 import com.a14.emart.backendbchr.repository.CartItemRepository;
 import com.a14.emart.backendbchr.repository.ShoppingCartRepository;
 import com.a14.emart.backendbchr.rest.ProductService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 

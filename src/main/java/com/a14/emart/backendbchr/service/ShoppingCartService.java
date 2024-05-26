@@ -12,10 +12,4 @@ public interface ShoppingCartService {
     public ShoppingCart addItemToCart(Long pembeliId, String productId, String supermarketId);
     public ShoppingCart removeItemFromCart(Long pembeliId, String productId);
     public double calculateTotalPrice(Long pembeliId);
-
-//    ShoppingCart clearShoppingCart(ShoppingCart shoppingCart);
-//    public void checkoutKeranjang(HashMap<String, Integer> productQuantities);
-
-
-
 }
