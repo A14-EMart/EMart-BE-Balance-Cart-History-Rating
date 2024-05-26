@@ -31,40 +31,43 @@ public class BalanceController {
     }
 
     @PostMapping("/adjust")
-    public ResponseEntity<ApiResponse<String>> adjustBalance(@RequestBody BalanceRequestDTO request) {
+    public ResponseEntity<ApiResponse<BigDecimal>> adjustBalance(@RequestBody BalanceRequestDTO request) {
         balanceService.adjustBalance(request);
-        ApiResponse<String> response = new ApiResponse<>(true, "Transaction successful", null);
+        BalanceDTO balance = balanceService.getBalance(request.getUserId());
+        ApiResponse<BigDecimal> response = new ApiResponse<>(true, "Transaction successful", balance.getNominal());
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/withdraw")
-    public ResponseEntity<ApiResponse<String>> withdraw(@RequestBody BalanceRequestDTO request) {
+    public ResponseEntity<ApiResponse<BigDecimal>> withdraw(@RequestBody BalanceRequestDTO request) {
         try {
             balanceService.withdraw(request);
-            ApiResponse<String> response = new ApiResponse<>(true, "Withdrawal successful", null);
+            BalanceDTO balance = balanceService.getBalance(request.getUserId());
+            ApiResponse<BigDecimal> response = new ApiResponse<>(true, "Withdrawal successful", balance.getNominal());
             return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
-            ApiResponse<String> response = new ApiResponse<>(false, e.getMessage(), null);
+            ApiResponse<BigDecimal> response = new ApiResponse<>(false, e.getMessage(), null);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
 
     @PostMapping("/top-up")
-    public ResponseEntity<ApiResponse<String>> topUp(@RequestBody BalanceRequestDTO request) {
+    public ResponseEntity<ApiResponse<BigDecimal>> topUp(@RequestBody BalanceRequestDTO request) {
         try {
             balanceService.topUp(request);
-            ApiResponse<String> response = new ApiResponse<>(true, "Top-up successful", null);
+            BalanceDTO balance = balanceService.getBalance(request.getUserId());
+            ApiResponse<BigDecimal> response = new ApiResponse<>(true, "Top-up successful", balance.getNominal());
             return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
-            ApiResponse<String> response = new ApiResponse<>(false, e.getMessage(), null);
+            ApiResponse<BigDecimal> response = new ApiResponse<>(false, e.getMessage(), null);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ApiResponse<String>> createBalance(@RequestParam Long userId) {
+    public ResponseEntity<ApiResponse<String>> createBalance(@RequestBody BalanceRequestDTO request) {
         try {
-            balanceService.createBalance(userId);
+            balanceService.createBalance(request.getUserId());
             ApiResponse<String> response = new ApiResponse<>(true, "Balance created successfully", null);
             return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
