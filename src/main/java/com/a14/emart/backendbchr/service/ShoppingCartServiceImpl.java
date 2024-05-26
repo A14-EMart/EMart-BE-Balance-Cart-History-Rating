@@ -47,22 +47,26 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Override
     @Transactional
     public ShoppingCart addItemToCart(Long pembeliId, String productId, String supermarketId) {
+        // Retrieve or create the shopping cart
         ShoppingCart shoppingCart = shoppingCartRepository.findShoppingCartByPembeliId(pembeliId)
                 .orElseGet(() -> {
                     ShoppingCart newCart = new ShoppingCart();
                     newCart.setPembeliId(pembeliId);
-                    newCart.setSupermaketId(null);
-                    return newCart;
+                    newCart.setSupermaketId(supermarketId); // Set the supermarketId for the new cart
+                    return shoppingCartRepository.save(newCart); // Save and return the new cart
                 });
-        List<CartItem> cartItems = shoppingCart.getItems();
 
-        if (shoppingCart.getSupermaketId()==null) {
-            shoppingCart.setSupermaketId(supermarketId);
-        }
-        else if (!shoppingCart.getSupermaketId().equals(supermarketId)) {
+        // If the cart exists, ensure items are from the same supermarket
+        if (shoppingCart.getSupermaketId() != null && !shoppingCart.getSupermaketId().equals(supermarketId)) {
             throw new RuntimeException("All items in the cart must be from the same supermarket");
         }
 
+        // Set the supermarketId if it's a new cart
+        if (shoppingCart.getSupermaketId() == null) {
+            shoppingCart.setSupermaketId(supermarketId);
+        }
+
+        // Fetch product details and check stock
         GetProductResponse productResponse = productService.getProductById(UUID.fromString(productId));
         if (productResponse == null) {
             throw new IllegalArgumentException("Product not found");
@@ -73,37 +77,31 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             throw new IllegalArgumentException("Product is out of stock");
         }
 
+        // Find the existing item in the cart, if any
         Optional<CartItem> existingItem = shoppingCart.getItems().stream()
                 .filter(item -> item.getProductId().equals(productId))
                 .findFirst();
 
-//        if (existingItem.isPresent()) {
-//            CartItem cartItem = existingItem.get();
-//            cartItem.setAmount(cartItem.getAmount() + 1);
-//            cartItemRepository.save(cartItem);
-//        } else
-        System.out.println("Infinite");
-        for(CartItem item: cartItems){
-            if(item.getProductId() == productId){
-                item.setAmount(item.getAmount()+1);
-                break;
-            }
-            System.out.println("Real infinite");
+        if (existingItem.isPresent()) {
+            // If the item exists, update the amount
+            CartItem cartItem = existingItem.get();
+            cartItem.setAmount(cartItem.getAmount() + 1);
+        } else {
+            // If the item does not exist, create a new CartItem
+            CartItem newItem = new CartItem();
+            newItem.setPembeliId(pembeliId);
+            newItem.setProductId(productId);
+            newItem.setAmount(1);
+            newItem.setShoppingCart(shoppingCart);
+            // Set the shopping cart reference
+            shoppingCart.getItems().add(newItem); // Add the new item to the cart
         }
 
-        if(existingItem.isEmpty()) {
-            CartItem cartItem = CartItem.getBuilder()
-                    .setPembeliId(pembeliId)
-                    .setProductId(productId)
-                    .setAmount(1)
-                    .build();
-            shoppingCart.addItem(cartItem);
-            cartItemRepository.save(cartItem);
-
-        }
-
+        // Save the updated cart
         return shoppingCartRepository.save(shoppingCart);
     }
+
+
 
     @Override
     @Transactional
