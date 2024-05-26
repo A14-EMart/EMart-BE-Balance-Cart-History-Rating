@@ -41,6 +41,7 @@ public class ShoppingCartController {
     public ResponseEntity<ApiResponse<ShoppingCart>> createShoppingCart(
             @RequestParam("userId") Long userId,
             @RequestHeader("Authorization") String token) {
+        System.out.println("Request received in createShoppingCart");
         try {
             String tokenWithoutBearer = token.replace("Bearer ", "");
             String role = jwtService.extractRole(tokenWithoutBearer);
@@ -83,6 +84,25 @@ public class ShoppingCartController {
         Long userId = jwtService.extractUserId(jwt);
         ShoppingCart shoppingCart = shoppingCartService.removeItemFromCart(userId, productId);
         return ResponseEntity.ok(shoppingCart);
+    }
+    @GetMapping("/totalPrice/{pembeliId}")
+    public ResponseEntity<Double> calculateTotalPrice(@RequestParam ("userId") Long pembeliId) {
+        try {
+            double totalPrice = shoppingCartService.calculateTotalPrice(pembeliId);
+            return ResponseEntity.ok(totalPrice);
+        } catch (RuntimeException ex) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PostMapping("/clear/{pembeliId}")
+    public ResponseEntity<ShoppingCart> clearShoppingCart(@RequestParam ("userId") Long pembeliId) {
+        try {
+            ShoppingCart shoppingCart = shoppingCartService.clearShoppingCart(pembeliId);
+            return ResponseEntity.ok(shoppingCart);
+        } catch (RuntimeException ex) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 }
