@@ -21,8 +21,7 @@ public class Balance {
         // Default
     }
 
-    public Balance(UUID userId, BigDecimal nominal) {
-        this.userId = userId;
-        this.nominal = nominal;
+    public static BalanceBuilder getBuilder() {
+        return new BalanceBuilder();
     }
 }
