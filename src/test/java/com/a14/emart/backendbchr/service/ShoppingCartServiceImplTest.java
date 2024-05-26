@@ -84,20 +84,31 @@ class ShoppingCartServiceImplTest {
 
 
     @Test
-    void testAddItemToCart() {
-        shoppingCart.addItem(cartItem);
-        when(shoppingCartRepository.findShoppingCartByPembeliId(1L)).thenReturn(Optional.of(shoppingCart));
-        when(cartItemRepository.save(any(CartItem.class))).thenReturn(cartItem);
-        when(shoppingCartRepository.save(any(ShoppingCart.class))).thenReturn(shoppingCart);
+    void testAddItemToCart_NewItem() {
+        Long pembeliId = 2L;
+        String productId = "product1";
+        String supermarketId = "supermarket1";
 
-        ShoppingCart updatedCart = shoppingCartService.addItemToCart(1L, "newProduct", "supermarket456");
+        ShoppingCart existingCart = new ShoppingCart();
+        existingCart.setPembeliId(pembeliId);
+        existingCart.setSupermaketId(supermarketId);
+        existingCart.setItems(new ArrayList<>());
+
+        GetProductResponse productResponse = new GetProductResponse();
+        productResponse.setStock(10);
+
+        when(shoppingCartRepository.findShoppingCartByPembeliId(pembeliId)).thenReturn(Optional.of(existingCart));
+        when(productService.getProductById(productId)).thenReturn(productResponse);
+        when(shoppingCartRepository.save(any(ShoppingCart.class))).thenReturn(existingCart);
+
+        ShoppingCart updatedCart = shoppingCartService.addItemToCart(pembeliId, productId, supermarketId);
 
         assertNotNull(updatedCart);
-        assertEquals(2, updatedCart.getItems().size());
-        assertTrue(updatedCart.getItems().stream().anyMatch(item -> item.getProductId().equals("newProduct") && item.getAmount() == 1));
-        verify(shoppingCartRepository, times(1)).findShoppingCartByPembeliId(1L);
-        verify(cartItemRepository, times(1)).save(any(CartItem.class));
-        verify(shoppingCartRepository, times(1)).save(any(ShoppingCart.class));
+        assertEquals(pembeliId, updatedCart.getPembeliId());
+        assertEquals(supermarketId, updatedCart.getSupermaketId());
+        assertEquals(1, updatedCart.getItems().size());
+        assertEquals(productId, updatedCart.getItems().get(0).getProductId());
+        assertEquals(1, updatedCart.getItems().get(0).getAmount());
     }
     @Test
     void testAddItemToCart_ExistingItem() {
@@ -106,7 +117,7 @@ class ShoppingCartServiceImplTest {
         String supermarketId = "supermarket1";
 
         CartItem existingItem = new CartItem();
-        existingItem.setPembeliId(2L);
+        existingItem.setPembeliId(pembeliId);
         existingItem.setProductId(productId);
         existingItem.setAmount(1);
 
@@ -118,7 +129,11 @@ class ShoppingCartServiceImplTest {
         existingCart.setSupermaketId(supermarketId);
         existingCart.setItems(cartItems);
 
-        when(shoppingCartRepository.findShoppingCartByPembeliId(2L)).thenReturn(Optional.of(existingCart));
+        GetProductResponse productResponse = new GetProductResponse();
+        productResponse.setStock(10);
+
+        when(shoppingCartRepository.findShoppingCartByPembeliId(pembeliId)).thenReturn(Optional.of(existingCart));
+        when(productService.getProductById(productId)).thenReturn(productResponse);
         when(shoppingCartRepository.save(any(ShoppingCart.class))).thenReturn(existingCart);
 
         ShoppingCart updatedCart = shoppingCartService.addItemToCart(pembeliId, productId, supermarketId);
@@ -128,7 +143,7 @@ class ShoppingCartServiceImplTest {
         assertEquals(supermarketId, updatedCart.getSupermaketId());
         assertEquals(1, updatedCart.getItems().size());
         assertEquals(productId, updatedCart.getItems().get(0).getProductId());
-        assertEquals(2, updatedCart.getItems().get(0).getAmount());;
+        assertEquals(2, updatedCart.getItems().get(0).getAmount());
     }
 
     @Test
