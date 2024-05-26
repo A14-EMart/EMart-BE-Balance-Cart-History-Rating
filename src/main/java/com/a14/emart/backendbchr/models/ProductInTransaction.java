@@ -1,22 +1,21 @@
-package com.a14.emart.backendbchr.model;
+package com.a14.emart.backendbchr.models;
 
 import jakarta.persistence.Embeddable;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @Embeddable
+@Builder
 public class ProductInTransaction {
-    UUID id;
+    String id;
     String name;
     Long price;
     int quantity;
 
-    public ProductInTransaction(UUID id, String name, Long price, int quantity) {
+    public ProductInTransaction(String id, String name, Long price, int quantity) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -28,5 +27,9 @@ public class ProductInTransaction {
         if (quantity <= 0) {
             throw new IllegalArgumentException("Quantity must be a positive number");
         }
+    }
+
+    public Long getTotalPrice() {
+        return this.price * this.quantity;
     }
 }

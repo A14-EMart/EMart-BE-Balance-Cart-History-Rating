@@ -1,6 +1,5 @@
-package com.a14.emart.backendbchr.model;
+package com.a14.emart.backendbchr.models;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -12,7 +11,7 @@ class ProductInTransactionTest {
     @Test
     void testProductInTransactionDefaultStatus() {
         ProductInTransaction productIT1 = new ProductInTransaction(
-                SAMPLE_PRODUCT.getId(), SAMPLE_PRODUCT.getName(), SAMPLE_PRODUCT.getPrice(), 5
+                SAMPLE_PRODUCT.getId().toString(), SAMPLE_PRODUCT.getName(), SAMPLE_PRODUCT.getPrice(), 5
         );
 
         assertEquals(SAMPLE_PRODUCT.getId(), productIT1.getId());
@@ -24,11 +23,11 @@ class ProductInTransactionTest {
     @Test
     void testLessThanOrEqualZeroQuantity() {
         assertThrows(IllegalArgumentException.class, () -> {
-            new ProductInTransaction(SAMPLE_PRODUCT.getId(), SAMPLE_PRODUCT.getName(), SAMPLE_PRODUCT.getPrice(), 0);
+            new ProductInTransaction(SAMPLE_PRODUCT.getId().toString(), SAMPLE_PRODUCT.getName(), SAMPLE_PRODUCT.getPrice(), 0);
         });
 
         assertThrows(IllegalArgumentException.class, () -> {
-            new ProductInTransaction(SAMPLE_PRODUCT.getId(), SAMPLE_PRODUCT.getName(), SAMPLE_PRODUCT.getPrice(), -10);
+            new ProductInTransaction(SAMPLE_PRODUCT.getId().toString(), SAMPLE_PRODUCT.getName(), SAMPLE_PRODUCT.getPrice(), -10);
         });
     }
 }

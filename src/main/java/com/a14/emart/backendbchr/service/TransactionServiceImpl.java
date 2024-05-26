@@ -1,6 +1,6 @@
 package com.a14.emart.backendbchr.service;
 
-import com.a14.emart.backendbchr.model.Transaction;
+import com.a14.emart.backendbchr.models.Transaction;
 import com.a14.emart.backendbchr.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,12 +20,12 @@ public class TransactionServiceImpl implements TransactionService{
     }
 
     @Override
-    public List<Transaction> findByBuyer(UUID buyerId) {
+    public List<Transaction> findByBuyer(long buyerId) {
         return transactionRepository.findTransactionByPembeliId(buyerId);
     }
 
     @Override
-    public List<Transaction> findyByBuyerPerSupermarket(UUID buyerId, UUID supermarketId) {
+    public List<Transaction> findyByBuyerPerSupermarket(long buyerId, UUID supermarketId) {
         return transactionRepository.findTransactionByPembeliIdAndSupermarketId(buyerId, supermarketId);
     }
 

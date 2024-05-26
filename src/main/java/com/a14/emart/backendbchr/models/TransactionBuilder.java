@@ -1,4 +1,4 @@
-package com.a14.emart.backendbchr.model;
+package com.a14.emart.backendbchr.models;
 
 import java.time.LocalDateTime;
 import java.util.List;

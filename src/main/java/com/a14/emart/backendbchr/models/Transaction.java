@@ -1,4 +1,4 @@
-package com.a14.emart.backendbchr.model;
+package com.a14.emart.backendbchr.models;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,6 +11,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Builder
 public class Transaction {
     @Id
     @GeneratedValue
@@ -21,6 +22,9 @@ public class Transaction {
 
     @Column (nullable = false)
     private String supermarketName;
+
+    @Column (nullable = false)
+    private long pembeliId;
 
     @Column (nullable = false)
     private String buyerName;
