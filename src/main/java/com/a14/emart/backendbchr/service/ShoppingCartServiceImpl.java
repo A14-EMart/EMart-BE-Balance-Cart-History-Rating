@@ -9,7 +9,7 @@ import com.a14.emart.backendbchr.repository.CartItemRepository;
 import com.a14.emart.backendbchr.repository.ShoppingCartRepository;
 import com.a14.emart.backendbchr.rest.ProductService;
 import jakarta.transaction.Transactional;
-import org.springgframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
