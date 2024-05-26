@@ -22,7 +22,6 @@ public class CartItemBuilder {
 
     public CartItem build(){
         CartItem cartItem = new CartItem();
-        cartItem.setPembeliId(this.pembeliId);
         cartItem.setProductId(this.productId);
         cartItem.setAmount(this.amount);
         return cartItem;

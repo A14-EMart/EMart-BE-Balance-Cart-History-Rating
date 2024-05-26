@@ -16,8 +16,6 @@ public class ShoppingCartBuilder {
         return this;
     }
 
-
-
     public ShoppingCart build(){
         ShoppingCart shoppingCart = new ShoppingCart();
         shoppingCart.setPembeliId(this.pembeliId);

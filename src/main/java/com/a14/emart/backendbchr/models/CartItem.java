@@ -12,10 +12,11 @@ import java.util.UUID;
 @Table(name = "cartItem")
 @Entity
 public class CartItem {
-    @Id
+
     @Column(name = "pembeliId")
     private Long pembeliId;
 
+    @Id
     @Column(name = "productId")
     private String productId;
 
@@ -31,13 +32,4 @@ public class CartItem {
     public static CartItemBuilder getBuilder(){
         return new CartItemBuilder();
     }
-
-//    public CartItem(Product product, int quantity) {
-//        this.product = product;
-//        this.quantity = quantity;
-//    }
-//
-//    public void setQuantity(int quantity) {
-//        this.quantity = quantity;
-//    }
 }

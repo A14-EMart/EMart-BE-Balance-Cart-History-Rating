@@ -65,16 +65,4 @@ public class TransactionBuilder {
         this.komentar = null;
         return this;
     }
-//    public Transaction build() {
-//        Transaction transaction = new Transaction();
-//        transaction.setId(this.id);
-//        transaction.setSupermarketName(this.supermarketName);
-//        transaction.setBuyerName(this.buyerName);
-//        transaction.setTanggalDanWaktuPembelian(this.tanggalDanWaktuPembelian);
-//        transaction.setProducts(this.products);
-//        transaction.setTotalHarga(this.totalHarga);
-//        transaction.setRating(this.rating);
-//        transaction.setKomentar(this.komentar);
-//        return transaction;
-//    }
 }

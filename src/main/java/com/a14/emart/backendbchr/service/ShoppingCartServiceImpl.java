@@ -9,7 +9,7 @@ import com.a14.emart.backendbchr.repository.CartItemRepository;
 import com.a14.emart.backendbchr.repository.ShoppingCartRepository;
 import com.a14.emart.backendbchr.rest.ProductService;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springgframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -124,6 +124,18 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
         return shoppingCartRepository.save(shoppingCart);
     }
+    @Override
+    public double calculateTotalPrice(Long pembeliId) {
+        ShoppingCart shoppingCart = shoppingCartRepository.findShoppingCartByPembeliId(pembeliId)
+                .orElseThrow(() -> new RuntimeException("ShoppingCart not found"));
 
-
+        return shoppingCart.getItems().stream()
+                .mapToDouble(item -> {
+                    GetProductResponse productResponse = productService.getProductById(UUID.fromString(item.getProductId()));
+                    return item.getAmount() * productResponse.getPrice();
+                })
+                .sum();
+    }
 }
+
+

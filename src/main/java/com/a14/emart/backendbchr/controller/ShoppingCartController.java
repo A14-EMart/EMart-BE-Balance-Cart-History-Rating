@@ -25,6 +25,8 @@ public class ShoppingCartController {
     @Autowired
     private ShoppingCartService shoppingCartService;
 
+    @Autowired
+    private ProductService productService;
     //    @PostMapping("/create")
 //    public ResponseEntity<ShoppingCart> createShoppingCart(
 //            @RequestHeader(value = "Authorization") String token) throws IllegalAccessException {
@@ -40,6 +42,7 @@ public class ShoppingCartController {
     public ResponseEntity<ApiResponse<ShoppingCart>> createShoppingCart(
             @RequestParam("userId") Long userId,
             @RequestHeader("Authorization") String token) {
+        System.out.println("Request received in createShoppingCart");
         try {
             String tokenWithoutBearer = token.replace("Bearer ", "");
             String role = jwtService.extractRole(tokenWithoutBearer);
@@ -82,6 +85,15 @@ public class ShoppingCartController {
         Long userId = jwtService.extractUserId(jwt);
         ShoppingCart shoppingCart = shoppingCartService.removeItemFromCart(userId, productId);
         return ResponseEntity.ok(shoppingCart);
+    }
+    @GetMapping("/totalPrice/{pembeliId}")
+    public ResponseEntity<Double> calculateTotalPrice(@RequestParam ("userId") Long pembeliId) {
+        try {
+            double totalPrice = shoppingCartService.calculateTotalPrice(pembeliId);
+            return ResponseEntity.ok(totalPrice);
+        } catch (RuntimeException ex) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 }

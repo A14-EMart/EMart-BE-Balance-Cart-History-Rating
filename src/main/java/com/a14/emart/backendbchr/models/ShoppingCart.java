@@ -36,7 +36,6 @@ public class ShoppingCart {
         this.items.add(cartItem);
     }
 
-    // Method to remove an item from the cart
     public void removeItem(CartItem cartItem) {
         cartItem.setShoppingCart(null);
         this.items.remove(cartItem);
