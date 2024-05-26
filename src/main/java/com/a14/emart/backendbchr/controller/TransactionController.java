@@ -221,10 +221,36 @@ public class TransactionController {
         }
     }
 
-//    @GetMapping("/find-by-supermarket/{idSupermarket}")
-//    public ResponseEntity<ApiResponse<List<GetTransactionResponse>>> getTransactionPerSupermarket(
-//
-//    )
+    @GetMapping("/find-by-supermarket/{idSupermarket}")
+    public ResponseEntity<ApiResponse<List<GetTransactionResponse>>> getTransactionPerSupermarket(
+            @PathVariable UUID idSupermarket,
+            @RequestHeader("Authorization") String token) {
+        try {
+            GetSupermarketResponse supermarketResponse = supermarketService.getSupermarketById(idSupermarket);
+            Long idManagerSupermarket = supermarketResponse.getPengelola();
+            String tokenWithoutBearer = token.replace("Bearer ", "");
+            String role = jwtService.extractRole(tokenWithoutBearer);
+            Long id = jwtService.extractUserId(tokenWithoutBearer);
+
+            if (!role.equalsIgnoreCase("manager") || !idManagerSupermarket.equals(id)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body(new ApiResponse<>(false, null, "You have no access"));
+            }
+
+            List<GetTransactionResponse> history = new ArrayList<>();
+            List<Transaction> results = transactionService.findBySupermarket(idSupermarket);
+
+            for (Transaction result : results) {
+                GetTransactionResponse transaction = new GetTransactionResponse(result);
+                history.add(transaction);
+            }
+            return ResponseEntity.ok(new ApiResponse<>(true, history, "Success"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+
+    }
+
 
     @GetMapping("/get-supermarket/{id}")
     public ResponseEntity<ApiResponse<GetSupermarketResponse>> getSupermarket(@PathVariable UUID id) {

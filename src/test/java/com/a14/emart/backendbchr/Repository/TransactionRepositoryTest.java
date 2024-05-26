@@ -34,7 +34,7 @@ class TransactionRepositoryTest {
     private final UUID SAMPLE1_SUPERMARKET_ID = UUID.randomUUID();
     private final UUID SAMPLE2_SUPERMARKET_ID = UUID.randomUUID();
 
-    private final long SAMPLE1_BUYER_ID = 1;
+    private final long SAMPLE1_BUYER_ID = 1L;
 
     private Transaction transaction;
     private Transaction transaction2;
@@ -96,26 +96,26 @@ class TransactionRepositoryTest {
         assertNotEquals(buyerTransaction1.getFirst(), buyerTransaction2.getFirst());
     }
 
-//    @Test
-//    void testDeleteBuyerAndCascadeDeleteTransactions() {
-//        // Verify initial state
-//        UUID buyerId = buyer.getId();
-//        List<Transaction> buyerTransactions = transactionRepository.findTransactionByPembeliId(buyerId);
-//        assertEquals(2, buyerTransactions.size());
-//
-//        // Delete the buyer
-//        entityManager.remove(entityManager.find(Pembeli.class, buyerId));
-//        entityManager.flush();
-//        entityManager.clear();
-//
-//        // Verify that the buyer is deleted
-//        Optional<Pembeli> deletedBuyer = Optional.ofNullable(entityManager.find(Pembeli.class, buyerId));
-//        assertTrue(deletedBuyer.isEmpty());
-//
-//        // Verify that the transactions are also deleted
-//        List<Transaction> transactionsAfterDeletion = transactionRepository.findTransactionByPembeliId(buyerId);
-//        assertEquals(0, transactionsAfterDeletion.size());
-//    }
+    @Test
+    void testFindTransactionPerSupermarket() {
+        transaction = new Transaction();
+        transaction.setSupermarketName("Supermarket A");
+        transaction.setSupermarketId(SAMPLE1_SUPERMARKET_ID);
+        transaction.setBuyerName("John Doe");
+        transaction.setPembeliId(SAMPLE1_BUYER_ID);
+        transaction.setTanggalDanWaktuPembelian(LocalDateTime.now());
+        transaction.setTotalHarga(25.0f);
+        transaction.setProducts(products);
+        transaction.setRating(5);
+        transaction.setKomentar("Great service!");
+        entityManager.persist(transaction);
+
+        List<Transaction> transactionsSupermarket1 = transactionRepository.findTransactionBySupermarketId(SAMPLE1_SUPERMARKET_ID);
+        List<Transaction> transactionsSupermarket2 = transactionRepository.findTransactionBySupermarketId(SAMPLE2_SUPERMARKET_ID);
+
+        assertEquals(2, transactionsSupermarket1.size());
+        assertEquals(1, transactionsSupermarket2.size());
+    }
 
     @Test
     void testDeleteTransaction() {

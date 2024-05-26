@@ -19,14 +19,7 @@ public class ProductInTransaction {
         this.id = id;
         this.name = name;
         this.price = price;
-        quantityValidator(quantity);
         this.quantity = quantity;
-    }
-
-    public void quantityValidator(int quantity) {
-        if (quantity <= 0) {
-            throw new IllegalArgumentException("Quantity must be a positive number");
-        }
     }
 
     public Long getTotalPrice() {
