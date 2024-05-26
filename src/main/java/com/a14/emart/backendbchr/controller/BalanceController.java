@@ -1,8 +1,8 @@
 package com.a14.emart.backendbchr.controller;
 
-import com.a14.emart.backendbchr.dto.BalanceDTO;
-import com.a14.emart.backendbchr.dto.BalanceRequestDTO;
-import com.a14.emart.backendbchr.dto.TransferRequestDTO;
+import com.a14.emart.backendbchr.DTO.BalanceDTO;
+import com.a14.emart.backendbchr.DTO.BalanceRequestDTO;
+import com.a14.emart.backendbchr.DTO.TransferRequestDTO;
 import com.a14.emart.backendbchr.service.BalanceService;
 import com.a14.emart.backendbchr.controller.ApiResponse;
 
@@ -27,7 +27,7 @@ public class BalanceController {
     @GetMapping("/{userId}")
     public ResponseEntity<ApiResponse<BalanceDTO>> getBalance(@PathVariable Long userId) {
         BalanceDTO balance = balanceService.getBalance(userId);
-        ApiResponse<BalanceDTO> response = new ApiResponse<>(true, "Balance retrieved successfully", balance);
+        ApiResponse<BalanceDTO> response = new ApiResponse<>(true, balance,"Balance retrieved successfully");
         return ResponseEntity.ok(response);
     }
 
@@ -35,7 +35,7 @@ public class BalanceController {
     public ResponseEntity<ApiResponse<BigDecimal>> adjustBalance(@RequestBody BalanceRequestDTO request) {
         balanceService.adjustBalance(request);
         BalanceDTO balance = balanceService.getBalance(request.getUserId());
-        ApiResponse<BigDecimal> response = new ApiResponse<>(true, "Transaction successful", balance.getNominal());
+        ApiResponse<BigDecimal> response = new ApiResponse<>(true, balance.getNominal(), "Transaction successful");
         return ResponseEntity.ok(response);
     }
 
@@ -44,10 +44,10 @@ public class BalanceController {
         try {
             balanceService.withdraw(request);
             BalanceDTO balance = balanceService.getBalance(request.getUserId());
-            ApiResponse<BigDecimal> response = new ApiResponse<>(true, "Withdrawal successful", balance.getNominal());
+            ApiResponse<BigDecimal> response = new ApiResponse<>(true, balance.getNominal(), "Withdrawal successful");
             return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
-            ApiResponse<BigDecimal> response = new ApiResponse<>(false, e.getMessage(), null);
+            ApiResponse<BigDecimal> response = new ApiResponse<>(false, null, e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
@@ -57,10 +57,10 @@ public class BalanceController {
         try {
             balanceService.topUp(request);
             BalanceDTO balance = balanceService.getBalance(request.getUserId());
-            ApiResponse<BigDecimal> response = new ApiResponse<>(true, "Top-up successful", balance.getNominal());
+            ApiResponse<BigDecimal> response = new ApiResponse<>(true, balance.getNominal(),  "Top-up successful");
             return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
-            ApiResponse<BigDecimal> response = new ApiResponse<>(false, e.getMessage(), null);
+            ApiResponse<BigDecimal> response = new ApiResponse<>(false, null, e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
@@ -69,10 +69,10 @@ public class BalanceController {
     public ResponseEntity<ApiResponse<String>> createBalance(@RequestBody BalanceRequestDTO request) {
         try {
             balanceService.createBalance(request.getUserId());
-            ApiResponse<String> response = new ApiResponse<>(true, "Balance created successfully", null);
+            ApiResponse<String> response = new ApiResponse<>(true, null, "Balance created successfully");
             return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
-            ApiResponse<String> response = new ApiResponse<>(false, e.getMessage(), null);
+            ApiResponse<String> response = new ApiResponse<>(false, e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
@@ -81,10 +81,10 @@ public class BalanceController {
     public ResponseEntity<ApiResponse<String>> transferBalance(@RequestBody TransferRequestDTO request) {
         try {
             balanceService.transferBalance(request);
-            ApiResponse<String> response = new ApiResponse<>(true, "Transfer successful", null);
+            ApiResponse<String> response = new ApiResponse<>(true, null, "Transfer successful");
             return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
-            ApiResponse<String> response = new ApiResponse<>(false, e.getMessage(), null);
+            ApiResponse<String> response = new ApiResponse<>(false, null, e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }

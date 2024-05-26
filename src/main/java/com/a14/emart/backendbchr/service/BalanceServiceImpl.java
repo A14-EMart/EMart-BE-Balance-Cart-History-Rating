@@ -1,8 +1,8 @@
 package com.a14.emart.backendbchr.service;
 
-import com.a14.emart.backendbchr.dto.BalanceDTO;
-import com.a14.emart.backendbchr.dto.BalanceRequestDTO;
-import com.a14.emart.backendbchr.dto.TransferRequestDTO;
+import com.a14.emart.backendbchr.DTO.BalanceDTO;
+import com.a14.emart.backendbchr.DTO.BalanceRequestDTO;
+import com.a14.emart.backendbchr.DTO.TransferRequestDTO;
 import com.a14.emart.backendbchr.models.Balance;
 import com.a14.emart.backendbchr.models.BalanceBuilder;
 import com.a14.emart.backendbchr.repository.BalanceRepository;

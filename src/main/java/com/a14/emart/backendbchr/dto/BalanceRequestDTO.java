@@ -1,4 +1,4 @@
-package com.a14.emart.backendbchr.dto;
+package com.a14.emart.backendbchr.DTO;
 
 import java.math.BigDecimal;
 
