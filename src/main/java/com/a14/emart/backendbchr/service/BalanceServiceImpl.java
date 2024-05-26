@@ -3,13 +3,13 @@ package com.a14.emart.backendbchr.service;
 import com.a14.emart.backendbchr.dto.BalanceDTO;
 import com.a14.emart.backendbchr.dto.BalanceRequestDTO;
 import com.a14.emart.backendbchr.models.Balance;
+import com.a14.emart.backendbchr.models.BalanceBuilder;
 import com.a14.emart.backendbchr.repository.BalanceRepository;
 
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
-import java.util.UUID;
 
 @Service
 public class BalanceServiceImpl implements BalanceService {
@@ -22,7 +22,7 @@ public class BalanceServiceImpl implements BalanceService {
     }
 
     @Override
-    public BalanceDTO getBalance(UUID userId) {
+    public BalanceDTO getBalance(Long userId) {
         Balance balance = balanceRepository.findByUserId(userId);
         return balance != null ? new BalanceDTO(balance.getUserId(), balance.getNominal()) : new BalanceDTO(userId, BigDecimal.ZERO);
     }
@@ -64,5 +64,21 @@ public class BalanceServiceImpl implements BalanceService {
         } else {
             throw new RuntimeException("Balance not found for user: " + request.getUserId());
         }
+    }
+
+    @Override
+    @Transactional
+    public void createBalance(Long userId) {
+        Balance existingBalance = balanceRepository.findByUserId(userId);
+        if (existingBalance != null) {
+            throw new RuntimeException("Balance already exists for user: " + userId);
+        }
+
+        Balance balance = Balance.getBuilder()
+                .setUserId(userId)
+                .setNominal(BigDecimal.ZERO)
+                .build();
+
+        balanceRepository.save(balance);
     }
 }

@@ -14,7 +14,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -29,12 +28,12 @@ public class BalanceServiceImplTest {
     @InjectMocks
     private BalanceServiceImpl balanceService;
 
-    private UUID userId;
+    private Long userId;
     private Balance balance;
 
     @BeforeEach
     public void setUp() {
-        this.userId = UUID.randomUUID();
+        this.userId = 1L;
         this.balance = Balance.getBuilder()
                 .setUserId(this.userId)
                 .setNominal(BigDecimal.valueOf(100))

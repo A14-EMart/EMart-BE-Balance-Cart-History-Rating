@@ -4,15 +4,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import java.math.BigDecimal;
-import java.util.UUID;
 
 public class BalanceTest {
     private Balance balance;
-    private UUID userId;
+    private Long userId;
 
     @BeforeEach
     public void setUp() {
-        this.userId = UUID.randomUUID();
+        this.userId = 1L;
         BigDecimal nominal = BigDecimal.valueOf(20000);
         this.balance = Balance.getBuilder()
                 .setUserId(this.userId)

@@ -1,13 +1,12 @@
 package com.a14.emart.backendbchr.models;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 public class BalanceBuilder {
-    private UUID userId;
+    private Long userId;
     private BigDecimal nominal;
 
-    public BalanceBuilder setUserId(UUID userId) {
+    public BalanceBuilder setUserId(Long userId) {
         this.userId = userId;
         return this;
     }

@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/balance")
@@ -25,7 +24,7 @@ public class BalanceController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<ApiResponse<BalanceDTO>> getBalance(@PathVariable UUID userId) {
+    public ResponseEntity<ApiResponse<BalanceDTO>> getBalance(@PathVariable Long userId) {
         BalanceDTO balance = balanceService.getBalance(userId);
         ApiResponse<BalanceDTO> response = new ApiResponse<>(true, "Balance retrieved successfully", balance);
         return ResponseEntity.ok(response);
@@ -55,6 +54,18 @@ public class BalanceController {
         try {
             balanceService.topUp(request);
             ApiResponse<String> response = new ApiResponse<>(true, "Top-up successful", null);
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            ApiResponse<String> response = new ApiResponse<>(false, e.getMessage(), null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<ApiResponse<String>> createBalance(@RequestParam Long userId) {
+        try {
+            balanceService.createBalance(userId);
+            ApiResponse<String> response = new ApiResponse<>(true, "Balance created successfully", null);
             return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
             ApiResponse<String> response = new ApiResponse<>(false, e.getMessage(), null);

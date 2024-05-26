@@ -1,24 +1,24 @@
 package com.a14.emart.backendbchr.dto;
 
 import java.math.BigDecimal;
-import java.util.UUID;
+
 
 public class BalanceRequestDTO {
-    private UUID userId;
+    private Long userId;
     private BigDecimal amount;
 
     public BalanceRequestDTO() {}
 
-    public BalanceRequestDTO(UUID userId, BigDecimal amount) {
+    public BalanceRequestDTO(Long userId, BigDecimal amount) {
         this.userId = userId;
         this.amount = amount;
     }
 
-    public UUID getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(UUID userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 

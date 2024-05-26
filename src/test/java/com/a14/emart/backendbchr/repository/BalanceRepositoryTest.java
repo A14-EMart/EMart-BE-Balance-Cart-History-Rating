@@ -7,7 +7,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 import java.math.BigDecimal;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,9 +20,8 @@ public class BalanceRepositoryTest {
 
     @Test
     public void testFindByUserId() {
-        UUID userId = UUID.randomUUID(); 
+        Long userId = 1L;
         BigDecimal nominal = BigDecimal.valueOf(0);
-        // Balance balance = new Balance(userId, nominal);
         Balance balance = Balance.getBuilder()
                 .setUserId(userId)
                 .setNominal(nominal)
@@ -39,7 +37,7 @@ public class BalanceRepositoryTest {
 
     @Test
     public void testFindByUserIdNonExisting() {
-        UUID nonExistingUserId = UUID.randomUUID();
+        Long nonExistingUserId = 1010L;
 
         Balance foundBalance = balanceRepository.findByUserId(nonExistingUserId);
         
