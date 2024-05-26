@@ -21,7 +21,7 @@ configurations {
 repositories {
 	mavenCentral()
 }
-
+var jsonwebtokenVersion = "0.11.5"
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
 	implementation("org.springframework.boot:spring-boot-starter-web")
@@ -30,6 +30,21 @@ dependencies {
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	implementation("org.postgresql:postgresql")
+//	runtimeOnly("org.postgresql:postgresql")
+	runtimeOnly("com.h2database:h2:2.2.222")
+	runtimeOnly("io.micrometer:micrometer-registry-prometheus")
+	implementation("io.jsonwebtoken:jjwt-api:$jsonwebtokenVersion")
+	implementation("io.jsonwebtoken:jjwt-impl:$jsonwebtokenVersion")
+	implementation("io.jsonwebtoken:jjwt-jackson:$jsonwebtokenVersion")
+	implementation("org.springframework.security:spring-security-core")
+	implementation("org.springframework.security:spring-security-web")
+	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.springframework.security:spring-security-test")
+	implementation("io.github.cdimascio:dotenv-java:2.2.3")
+	implementation("org.springframework.boot:spring-boot-starter-webflux")
+	implementation("org.springframework.boot:spring-boot-starter-actuator")
 }
 
 tasks.withType<Test> {
