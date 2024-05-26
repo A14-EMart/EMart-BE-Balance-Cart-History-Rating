@@ -23,7 +23,11 @@ public class BalanceRepositoryTest {
     public void testFindByUserId() {
         UUID userId = UUID.randomUUID(); 
         BigDecimal nominal = BigDecimal.valueOf(0);
-        Balance balance = new Balance(userId, nominal);
+        // Balance balance = new Balance(userId, nominal);
+        Balance balance = Balance.getBuilder()
+                .setUserId(userId)
+                .setNominal(nominal)
+                .build();
         balanceRepository.save(balance);
 
         Balance foundBalance = balanceRepository.findByUserId(userId);
