@@ -1,4 +1,4 @@
-package com.a14.emart.backendbchr.DTO;
+package com.a14.emart.backendbchr.dto;
 
 import com.a14.emart.backendbchr.models.ProductInTransaction;
 import com.a14.emart.backendbchr.models.Transaction;

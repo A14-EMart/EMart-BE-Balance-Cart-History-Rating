@@ -1,6 +1,6 @@
 package com.a14.emart.backendbchr.rest;
 
-import com.a14.emart.backendbchr.DTO.GetProductResponse;
+import com.a14.emart.backendbchr.dto.GetProductResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;

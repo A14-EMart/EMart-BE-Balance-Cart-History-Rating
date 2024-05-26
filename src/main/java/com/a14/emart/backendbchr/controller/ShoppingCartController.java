@@ -1,17 +1,11 @@
 package com.a14.emart.backendbchr.controller;
-import com.a14.emart.backendbchr.DTO.CreateShoppingCartRequest;
 import com.a14.emart.backendbchr.models.ShoppingCart;
 import com.a14.emart.backendbchr.rest.ProductService;
 import com.a14.emart.backendbchr.service.*;
-import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.Optional;
 

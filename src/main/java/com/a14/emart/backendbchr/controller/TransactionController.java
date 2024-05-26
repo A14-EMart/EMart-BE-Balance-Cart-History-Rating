@@ -1,8 +1,8 @@
 package com.a14.emart.backendbchr.controller;
 
-import com.a14.emart.backendbchr.DTO.GetProductResponse;
-import com.a14.emart.backendbchr.DTO.GetSupermarketResponse;
-import com.a14.emart.backendbchr.DTO.GetTransactionResponse;
+import com.a14.emart.backendbchr.dto.GetProductResponse;
+import com.a14.emart.backendbchr.dto.GetSupermarketResponse;
+import com.a14.emart.backendbchr.dto.GetTransactionResponse;
 import com.a14.emart.backendbchr.models.*;
 import com.a14.emart.backendbchr.rest.ProductService;
 import com.a14.emart.backendbchr.rest.SupermarketService;
@@ -224,6 +224,5 @@ public class TransactionController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
-
     }
 }

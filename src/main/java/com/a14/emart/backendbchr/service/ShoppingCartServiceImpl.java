@@ -1,6 +1,6 @@
 package com.a14.emart.backendbchr.service;
 
-import com.a14.emart.backendbchr.DTO.GetProductResponse;
+import com.a14.emart.backendbchr.dto.GetProductResponse;
 import com.a14.emart.backendbchr.models.CartItem;
 import com.a14.emart.backendbchr.models.ShoppingCart;
 import com.a14.emart.backendbchr.repository.CartItemRepository;

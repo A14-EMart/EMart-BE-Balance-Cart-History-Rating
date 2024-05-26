@@ -1,13 +1,11 @@
 package com.a14.emart.backendbchr.rest;
 
-import com.a14.emart.backendbchr.DTO.GetSupermarketResponse;
-import com.a14.emart.backendbchr.DTO.SupermarketApiResponse;
+import com.a14.emart.backendbchr.dto.GetSupermarketResponse;
+import com.a14.emart.backendbchr.dto.SupermarketApiResponse;
 import com.a14.emart.backendbchr.models.Supermarket;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 import java.util.UUID;
 
