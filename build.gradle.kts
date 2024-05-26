@@ -45,6 +45,8 @@ dependencies {
 	implementation("io.github.cdimascio:dotenv-java:2.2.3")
 	implementation("org.springframework.boot:spring-boot-starter-webflux")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
+	implementation("org.springframework.boot:spring-boot-starter-actuator:3.2.5")
+	runtimeOnly("io.micrometer:micrometer-registry-prometheus:1.12.5")
 }
 
 tasks.withType<Test> {

@@ -1,6 +1,4 @@
 package com.a14.emart.backendbchr.models;
-import com.a14.emart.backendbchr.models.Product;
-
 import java.util.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
