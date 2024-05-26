@@ -1,5 +1,6 @@
 package com.a14.emart.backendbchr.service;
 
+import com.a14.emart.backendbchr.dto.GetProductResponse;
 import com.a14.emart.backendbchr.models.CartItem;
 import com.a14.emart.backendbchr.models.ShoppingCart;
 import com.a14.emart.backendbchr.repository.CartItemRepository;
@@ -12,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,8 +31,12 @@ class ShoppingCartServiceImplTest {
     @Mock
     private CartItemRepository cartItemRepository;
 
+    @Mock
+    private ProductService productService;
+
     private ShoppingCart shoppingCart;
     private CartItem cartItem;
+    private GetProductResponse productResponse;
 
     @BeforeEach
     void setUp() {
@@ -46,6 +52,11 @@ class ShoppingCartServiceImplTest {
                 .setProductId("product789")
                 .setAmount(2)
                 .build();
+
+        productResponse = new GetProductResponse();
+        productResponse.setPrice(50L);
+
+
     }
 
     @Test
@@ -199,4 +210,49 @@ class ShoppingCartServiceImplTest {
         assertEquals(pembeliId, updatedCart.getPembeliId());
         assertEquals(0, updatedCart.getItems().size());
     }
+    @Test
+    void testCalculateTotalPrice() {
+
+        shoppingCart = new ShoppingCart();
+        shoppingCart.setSupermaketId("super1");
+
+        cartItem = new CartItem();
+        cartItem.setProductId("product1");
+        cartItem.setAmount(2);
+
+        productResponse = new GetProductResponse();
+        productResponse.setPrice(50L);
+
+        shoppingCart.setItems(Arrays.asList(cartItem));
+
+        when(shoppingCartRepository.findShoppingCartByPembeliId(anyLong())).thenReturn(Optional.of(shoppingCart));
+        when(productService.getProductById(anyString())).thenReturn(productResponse);
+
+        double totalPrice = shoppingCartService.calculateTotalPrice(1L);
+        assertEquals(100.0, totalPrice);
+    }
+    @Test
+    void testClearShoppingCart() {
+        shoppingCart = new ShoppingCart();
+        shoppingCart.setSupermaketId("super1");
+
+        cartItem = CartItem.getBuilder()
+                .setPembeliId(1L)
+                .setProductId("product1")
+                .setAmount(2)
+                .build();
+        List<CartItem> cartItems = new ArrayList<>();
+        cartItems.add(cartItem);
+
+        productResponse = new GetProductResponse();
+        productResponse.setPrice(50L);
+
+        shoppingCart.setItems(cartItems);
+
+        when(shoppingCartRepository.findShoppingCartByPembeliId(anyLong())).thenReturn(Optional.empty());
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            ShoppingCart clearedCart = shoppingCartService.clearShoppingCart(1L);
+        });}
+
 }
