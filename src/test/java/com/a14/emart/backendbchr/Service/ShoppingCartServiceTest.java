@@ -19,7 +19,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class ShoppingCartServiceImplTest {
+class ShoppingCartServiceTest {
 
     @InjectMocks
     private ShoppingCartServiceImpl shoppingCartService;

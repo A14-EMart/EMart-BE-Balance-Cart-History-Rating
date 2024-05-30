@@ -3,18 +3,21 @@ package com.a14.emart.backendbchr.controller;
 import com.a14.emart.backendbchr.DTO.GetProductResponse;
 import com.a14.emart.backendbchr.DTO.GetSupermarketResponse;
 import com.a14.emart.backendbchr.DTO.GetTransactionResponse;
+import com.a14.emart.backendbchr.DTO.TransferRequestDTO;
 import com.a14.emart.backendbchr.models.*;
 import com.a14.emart.backendbchr.rest.ProductService;
 import com.a14.emart.backendbchr.rest.SupermarketService;
 import com.a14.emart.backendbchr.service.JwtService;
 import com.a14.emart.backendbchr.service.ShoppingCartService;
 import com.a14.emart.backendbchr.service.TransactionService;
+import com.a14.emart.backendbchr.service.BalanceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -34,6 +37,9 @@ public class TransactionController {
 
     @Autowired
     private SupermarketService supermarketService;
+
+    @Autowired
+    private BalanceService balanceService;
 
     private final JwtService jwtService;
 
@@ -96,11 +102,21 @@ public class TransactionController {
                 totalPrice += price;
             }
 
+            Long fromUserId = id;
+            Long toUserId = id;
+
+            // Create the TransferRequestDTO
+            TransferRequestDTO transferRequest = new TransferRequestDTO(fromUserId, toUserId, BigDecimal.valueOf(totalPrice));
+
+            // Call the transferBalance method
+            balanceService.transferBalance(transferRequest);
+
             String stringSupermarketId = buyerCart.get().getSupermaketId();
             stringSupermarketId = stringSupermarketId.replace("\"", "");
             UUID supermarketId = UUID.fromString(stringSupermarketId);
 
             GetSupermarketResponse supermarketResponse = supermarketService.getSupermarketById(supermarketId);
+            Long idManagerSupermarket = supermarketResponse.getPengelola();
             String supermarketName = supermarketResponse.getName();
 
             String username = "DIDI";
