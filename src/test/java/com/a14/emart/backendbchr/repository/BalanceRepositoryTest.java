@@ -1,6 +1,7 @@
-package com.a14.emart.backendbchr.repository;
+package com.a14.emart.backendbchr.Repository;
 
 import com.a14.emart.backendbchr.models.Balance;
+import com.a14.emart.backendbchr.repository.BalanceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -40,7 +41,7 @@ public class BalanceRepositoryTest {
         Long nonExistingUserId = 1010L;
 
         Balance foundBalance = balanceRepository.findByUserId(nonExistingUserId);
-        
+
         assertNull(foundBalance);
     }
 }
