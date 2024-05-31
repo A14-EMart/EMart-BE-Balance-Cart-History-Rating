@@ -102,15 +102,6 @@ public class TransactionController {
                 totalPrice += price;
             }
 
-            Long fromUserId = id;
-            Long toUserId = id;
-
-            // Create the TransferRequestDTO
-            TransferRequestDTO transferRequest = new TransferRequestDTO(fromUserId, toUserId, BigDecimal.valueOf(totalPrice));
-
-            // Call the transferBalance method
-            balanceService.transferBalance(transferRequest);
-
             String stringSupermarketId = buyerCart.get().getSupermaketId();
             stringSupermarketId = stringSupermarketId.replace("\"", "");
             UUID supermarketId = UUID.fromString(stringSupermarketId);
@@ -118,6 +109,15 @@ public class TransactionController {
             GetSupermarketResponse supermarketResponse = supermarketService.getSupermarketById(supermarketId);
             Long idManagerSupermarket = supermarketResponse.getPengelola();
             String supermarketName = supermarketResponse.getName();
+
+            Long fromUserId = id;
+            Long toUserId = idManagerSupermarket;
+
+            // Create the TransferRequestDTO
+            TransferRequestDTO transferRequest = new TransferRequestDTO(fromUserId, toUserId, BigDecimal.valueOf(totalPrice));
+
+            // Call the transferBalance method
+            balanceService.transferBalance(transferRequest);
 
             String username = "DIDI";
             Transaction transaction = Transaction.builder()
